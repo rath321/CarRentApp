@@ -1,0 +1,75 @@
+<div class="my-container mx-auto">
+    
+       
+        <h5 style="text-align:center"><b>Welcome to the Grocery Store</b></h5>
+
+
+   
+
+    <div class="border p-5">
+        <div class="btn-group btn-group-lg me-3"  role="group">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-dark " (click)="getAllProducts()">
+                    All
+                </button>
+            </div>
+        </div>
+        <div class="btn-group btn-group-lg me-3"  role="group">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown">
+                    Categories
+                </button>
+                <ul class="dropdown-menu fs-5">
+                    <ng-container *ngFor="let item of navigationList; let i = index;">
+                        <li class="text-center fw-bold">{{item.category | titlecase}}</li>
+                        <li *ngFor="let subcategory of item.subcategories" [style.cursor]="'pointer'">
+                            <a class="dropdown-item" OpenProducts
+                            [class.active]=""
+                               [category]="{id: 0, 'category': item.category, 'subCategory': subcategory}">
+                                {{subcategory | titlecase}}
+                            </a>
+                        </li>
+                        <li *ngIf="i !== navigationList.length - 1">
+                            <hr class="dropdown-divider">
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+        </div>
+        
+       <!-- <input type="text" placeholder="Search" style="margin-left: 50%;" [(ngModel)]="searchQuery" (ngModelChange)="applyFilter()"> -->
+       <input type="text" placeholder="  Search Product here" style="width: 850px;border-radius: 50px;" [(ngModel)]="searchQuery" (ngModelChange)="applyFilter()">
+
+       <table class="table table-striped">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+                <th scope="col">Image</th>
+                <th scope="col">Actions (For Admins)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of filteredItems  | paginate: { itemsPerPage: 5, currentPage: p }">
+                <td><a style="color: rgb(16, 77, 147); cursor: pointer;" OpenProductDetails [productId]="product.id" >{{(product.title.length>10)?product.title.slice(0, 20)+"...":product.title }}</a></td>
+                <td>{{ (product.description.length>10)?product.description.slice(0, 20)+"...":product.description }}</td>
+                <td><span>&#x20B9;</span>{{ product.price }}</td>
+                <td style="cursor: pointer;">  <img OpenProductDetails [productId]="product.id"  src="{{product?.imageName}}" alt="" style="width: 60px; height: 60px;" OpenProductDetails [productId]="product.id"></td>
+                <td>
+                  <div *ngIf="utilityService.isLoggedIn() && utilityService.isAdmin()">
+                    <i class="fas fa-edit" style="cursor: pointer;" [routerLink]="['update-product', product.id]"></i>
+                    <i style="padding-left: 20px;cursor: pointer;" (click)="deleteProduct(product.id)" class="fas fa-trash"></i>
+                  </div>
+                  
+              </tr>
+            </tbody>
+          </table>
+          
+          <div style="text-align: center; padding-left: 35%;" class="pagination">
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          </div>
+    </div>
+   
+      
+</div>

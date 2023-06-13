@@ -1,0 +1,50 @@
+<form [formGroup]="productForm" (ngSubmit)="onSubmit(productForm)">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title:</label>
+      <input type="text" id="title" class="form-control" formControlName="title" required>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description:</label>
+      <textarea id="description" class="form-control" formControlName="description" required></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="productCategoryId" class="form-label">Product Category:</label>
+      <select id="productCategoryId" class="form-select" formControlName="category" required>
+        <option *ngFor="let category of categories" [value]="category.id">{{ category.subCategory }}</option>
+      </select>
+    </div>
+ 
+    <div class="mb-3">
+      <label for="offerId" class="form-label">Discount Offer:</label>
+      <select id="offerId" class="form-select" formControlName="offer" required>
+        <option *ngFor="let offer of offers" [value]="offer.id">{{ offer.title }}</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Price:</label>
+      <input type="number" id="price" class="form-control" formControlName="price" required>
+    </div>
+    <div class="mb-3">
+      <label for="quantity" class="form-label">Quantity:</label>
+      <input type="number" id="quantity" class="form-control" formControlName="quantity" required>
+    </div>
+    <div class="mb-3">
+      <label for="imageName" class="form-label">Image Url:</label>
+      <input type="text" id="imageName" class="form-control" formControlName="imageName" required>
+      <div>
+        <h5><b>OR</b></h5>
+        <label for="imageName" class="form-label">Upload (png/jpg/jpeg only accepted): </label><br>
+        <small class="text-primary">(wait until image loads)</small>
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+        <div *ngIf="loading">
+          <!-- Show loading spinner or message -->
+          <div class="spinner"></div>
+          <p>Loading...</p>
+        </div>
+          </div>
+      <img src="{{productForm.controls['imageName'].value}}" *ngIf="productForm.controls['imageName'].valid" style="width: 70px;height: 70px;"/>
+    </div>
+    <button type="submit" *ngIf="mode==='create'" class="btn btn-primary">Create Product</button>
+    <button type="submit" *ngIf="mode==='edit'" class="btn btn-primary">Update Product</button>
+  </form>
+  

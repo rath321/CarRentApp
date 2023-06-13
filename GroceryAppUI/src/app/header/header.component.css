@@ -1,0 +1,32 @@
+:host {
+    display: block;
+    height: 4rem;
+    width: 100%;
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    z-index: 20;
+}
+/* Default styles for the header */
+header {
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+nav li {
+  margin-right: 10px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+}
+
