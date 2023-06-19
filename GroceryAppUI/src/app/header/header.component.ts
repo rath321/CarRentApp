@@ -20,21 +20,26 @@ import { ModalService } from '../services/modal.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  @ViewChild('closeButton') closeButton!: ElementRef;
+
+  closeModal(): void {
+    this.closeButton.nativeElement.click();
+  }
   @ViewChild('modalTitle') modalTitle!: ElementRef;
   @ViewChild('container', { read: ViewContainerRef, static: true })
   container!: ViewContainerRef;
   cartItems: number = 0;
-  userName:any;
+  userName: any;
   navigationList: NavigationItem[] = [];
   constructor(
     private navigationService: NavigationService,
     public utilityService: UtilityService,
-    private modalService:ModalService
+    private modalService: ModalService
   ) {}
   private modalComponentRef!: ComponentRef<any>;
   ngOnInit(): void {
     // Get Category List
-    this.userName=(this.utilityService.getUser()).firstName;
+    this.userName = this.utilityService.getUser().firstName;
 
     this.navigationService.getCategoryList().subscribe((list: Category[]) => {
       for (let item of list) {
@@ -72,7 +77,6 @@ export class HeaderComponent implements OnInit {
 
   openModal(name: string) {
     this.container.clear();
-
     let componentType!: Type<any>;
     if (name === 'login') {
       componentType = LoginComponent;
@@ -83,7 +87,8 @@ export class HeaderComponent implements OnInit {
       this.modalTitle.nativeElement.textContent = 'Enter Register Information';
     }
 
-    this.modalComponentRef=this.container.createComponent(componentType);
+    this.modalComponentRef = this.container.createComponent(componentType);
     this.modalService.setModalComponentRef(this.modalComponentRef);
+    this.closeModal();
   }
 }

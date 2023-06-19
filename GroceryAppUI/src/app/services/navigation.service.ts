@@ -20,8 +20,8 @@ export class NavigationService {
   getCategoryList() {
     let url = this.baseurl + 'GetCategoryList';
     return this.http.get<any[]>(url).pipe(
-      map((categories:any) =>
-        categories.map((category:any) => {
+      map((categories: any) =>
+        categories.map((category: any) => {
           let mappedCategory: Category = {
             id: category.id,
             category: category.category,
@@ -88,10 +88,14 @@ export class NavigationService {
     let url = this.baseurl + 'InsertCartItem/' + userid + '/' + productid;
     return this.http.post(url, null, { responseType: 'text' });
   }
-  
+
   getActiveCartOfUser(userid: number) {
     let url = this.baseurl + 'GetActiveCartOfUser/' + userid;
     return this.http.get(url);
+  }
+  updateActiveCartOfUser(userid: number) {
+    let url = this.baseurl + 'UpdateActiveCartOfUser/' + userid;
+    // return this.http.post(url);
   }
 
   getAllPreviousCarts(userid: number) {

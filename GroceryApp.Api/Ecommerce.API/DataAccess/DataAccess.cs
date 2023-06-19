@@ -69,6 +69,174 @@ namespace ECommerce.API.DataAccess
             return cart;
         }
 
+        //public void UpdateActiveCartOfUser(int userId, List<CartItem> updatedCartItems)
+        //{
+        //    using (SqlConnection connection = new SqlConnection(dbconnection))
+        //    {
+        //        connection.Open();
+
+        //        using (SqlTransaction transaction = connection.BeginTransaction())
+        //        {
+        //            try
+        //            {
+        //                // Step 1: Get the active cart ID for the user
+        //                int activeCartId = GetActiveCartIdForUser(userId, connection, transaction);
+
+        //                // Step 2: Clear existing cart items for the active cart
+        //                ClearCartItems(activeCartId, connection, transaction);
+
+        //                // Step 3: Add the updated cart items to the active cart
+        //                AddCartItems(activeCartId, updatedCartItems, connection, transaction);
+
+        //                // Commit the transaction
+        //                transaction.Commit();
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                // Handle any exception and rollback the transaction if necessary
+        //                transaction.Rollback();
+        //                throw ex;
+        //            }
+        //        }
+        //    }
+        //}
+
+        //public int GetActiveCartIdForUser(int userId, SqlConnection connection, SqlTransaction transaction)
+        //{
+        //    string query = "SELECT CartId FROM Carts WHERE UserId = @UserId AND Ordered = 'false';";
+        //    SqlCommand command = new SqlCommand(query, connection, transaction);
+        //    command.Parameters.AddWithValue("@UserId", userId);
+
+        //    int cartId = (int)command.ExecuteScalar();
+
+        //    return cartId;
+        //}
+
+        //public void ClearCartItems(int cartId, SqlConnection connection, SqlTransaction transaction)
+        //{
+        //    string query = "DELETE FROM CartItems WHERE CartId = @CartId;";
+        //    SqlCommand command = new SqlCommand(query, connection, transaction);
+        //    command.Parameters.AddWithValue("@CartId", cartId);
+
+        //    command.ExecuteNonQuery();
+        //}
+
+        //public void AddCartItems(int cartId, List<CartItem> cartItems, SqlConnection connection, SqlTransaction transaction)
+        //{
+        //    string query = "INSERT INTO CartItems (CartId, ProductId) VALUES (@CartId, @ProductId);";
+        //    SqlCommand command = new SqlCommand(query, connection, transaction);
+
+        //    foreach (CartItem cartItem in cartItems)
+        //    {
+        //        command.Parameters.Clear();
+        //        command.Parameters.AddWithValue("@CartId", cartId);
+        //        command.Parameters.AddWithValue("@ProductId", cartItem.Product.Id);
+
+        //        command.ExecuteNonQuery();
+        //    }
+        //}
+        public void UpdateActiveCartOfUser(int userId, List<CartItem> updatedCartItems)
+        {
+            using (SqlConnection connection = new SqlConnection(dbconnection))
+            {
+                connection.Open();
+
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Get the active cart for the user
+                        Cart activeCart = GetActiveCartOfUser1(userId, connection, transaction);
+
+                        // Clear existing cart items
+                        ClearCartItems(activeCart.Id, connection, transaction);
+
+                        // Add the updated cart items
+                        AddCartItems(activeCart.Id, updatedCartItems, connection, transaction);
+
+                        // Commit the transaction
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Handle any exception and rollback the transaction if necessary
+                        transaction.Rollback();
+                        throw ex;
+                    }
+                }
+            }
+        }
+
+        public Cart GetActiveCartOfUser1(int userId, SqlConnection connection, SqlTransaction transaction)
+        {
+            var cart = new Cart();
+            SqlCommand command = new SqlCommand()
+            {
+                Connection = connection,
+                Transaction = transaction
+            };
+
+            string query = "SELECT COUNT(*) From Carts WHERE UserId=" + userId + " AND Ordered='false';";
+            command.CommandText = query;
+
+            int count = (int)command.ExecuteScalar();
+            if (count == 0)
+            {
+                return cart;
+            }
+
+            query = "SELECT CartId From Carts WHERE UserId=" + userId + " AND Ordered='false';";
+            command.CommandText = query;
+
+            int cartId = (int)command.ExecuteScalar();
+
+            query = "select * from CartItems where CartId=" + cartId + ";";
+            command.CommandText = query;
+
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                CartItem item = new CartItem()
+                {
+                    Id = (int)reader["CartItemId"],
+                    Product = GetProduct((int)reader["ProductId"])
+                };
+                cart.CartItems.Add(item);
+            }
+            reader.Close();
+
+            cart.Id = cartId;
+            cart.User = GetUser(userId);
+            cart.Ordered = false;
+            cart.OrderedOn = "";
+
+            return cart;
+        }
+
+        public void ClearCartItems(int cartId, SqlConnection connection, SqlTransaction transaction)
+        {
+            string query = "DELETE FROM CartItems WHERE CartId = @CartId;";
+            SqlCommand command = new SqlCommand(query, connection, transaction);
+            command.Parameters.AddWithValue("@CartId", cartId);
+
+            command.ExecuteNonQuery();
+        }
+
+        public void AddCartItems(int cartId, List<CartItem> cartItems, SqlConnection connection, SqlTransaction transaction)
+        {
+            string query = "INSERT INTO CartItems (CartId, ProductId) VALUES (@CartId, @ProductId);";
+            SqlCommand command = new SqlCommand(query, connection, transaction);
+
+            foreach (CartItem cartItem in cartItems)
+            {
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@CartId", cartId);
+                command.Parameters.AddWithValue("@ProductId", cartItem.Product.Id);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
         public List<Cart> GetAllPreviousCartsOfUser(int userid)
         {
             var carts = new List<Cart>();

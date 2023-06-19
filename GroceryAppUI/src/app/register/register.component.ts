@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit {
   message = '';
   dropdownOptions = [
     { value: 'user', label: 'user' },
-    { value: 'admin', label: 'admin' }
+    { value: 'admin', label: 'admin' },
   ];
   constructor(
     private fb: FormBuilder,
@@ -46,25 +46,34 @@ export class RegisterComponent implements OnInit {
       ],
       email: ['', [Validators.required, Validators.email]],
       address: ['', [Validators.required]],
-      mobile: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
+      mobile: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(10),
+        ],
+      ],
       pwd: [
         '',
         [
           Validators.required,
           Validators.minLength(8),
           Validators.maxLength(18),
-          Validators.pattern(/^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*\d)(?=.*[a-zA-Z]).*$/)
+          Validators.pattern(
+            /^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*\d)(?=.*[a-zA-Z]).*$/
+          ),
         ],
       ],
       rpwd: [''],
-      isAdmin:['']
+      isAdmin: [''],
     });
   }
 
   register() {
-    var UserFirstName=this.FirstName.value;
-    if(this.isAdmin.value==='admin')
-    UserFirstName="admin-"+this.FirstName.value
+    var UserFirstName = this.FirstName.value;
+    if (this.isAdmin.value === 'admin')
+      UserFirstName = 'admin-' + this.FirstName.value;
     let user: User = {
       id: 0,
       firstName: UserFirstName,

@@ -120,6 +120,22 @@ namespace ECommerce.API.Controllers
             var result = dataAccess.InsertCartItem(userid, productid);
             return Ok(result ? "inserted" : "not inserted");
         }
+      
+
+        [HttpPut("UpdateActiveCartOfUser/{id}")]
+        public IActionResult UpdateActiveCartOfUser(int id, [FromBody] List<CartItem> updatedCartItems)
+        {
+            try
+            {
+                dataAccess.UpdateActiveCartOfUser(id, updatedCartItems);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
 
         [HttpGet("GetActiveCartOfUser/{id}")]
         public IActionResult GetActiveCartOfUser(int id)

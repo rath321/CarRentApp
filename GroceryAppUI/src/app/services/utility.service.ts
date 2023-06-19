@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt'
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Subject, window } from 'rxjs';
 import { Cart, Payment, Product, User } from '../models/models';
 import { NavigationService } from './navigation.service';
@@ -12,7 +12,7 @@ export class UtilityService {
   changeCart = new Subject();
 
   constructor(
-    private router:Router,
+    private router: Router,
     private navigationService: NavigationService,
     private jwt: JwtHelperService
   ) {}
@@ -47,13 +47,11 @@ export class UtilityService {
   isLoggedIn() {
     return localStorage.getItem('user') ? true : false;
   }
-  isAdmin()
-{
-  let user=this.getUser().firstName.slice(0, 6);
-  if(user==='admin-')
-  return true;
-  return false;
-}
+  isAdmin() {
+    let user = this.getUser().firstName.slice(0, 6);
+    if (user === 'admin-') return true;
+    return false;
+  }
   logoutUser() {
     localStorage.removeItem('user');
     this.router.navigate(['']);
@@ -62,10 +60,11 @@ export class UtilityService {
   addToCart(product: Product) {
     let productid = product.id;
     let userid = this.getUser().id;
-console.log(this.getUser(), product.id);
-    this.navigationService.addToCart(userid, productid).subscribe((res:any) => {
-      if (res.toString() === 'inserted') this.changeCart.next(1);
-    });
+    this.navigationService
+      .addToCart(userid, productid)
+      .subscribe((res: any) => {
+        if (res.toString() === 'inserted') this.changeCart.next(1);
+      });
   }
 
   calculatePayment(cart: Cart, payment: Payment) {
@@ -106,7 +105,5 @@ console.log(this.getUser(), product.id);
     return pricepaid;
   }
 
-  orderTheCart() {
-    
-  }
+  orderTheCart() {}
 }

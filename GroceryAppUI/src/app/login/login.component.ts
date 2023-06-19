@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnInit } from '@angular/core';
+import { Component, ComponentRef, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -9,6 +9,7 @@ import { NavigationService } from '../services/navigation.service';
 import { UtilityService } from '../services/utility.service';
 import { Router } from '@angular/router';
 import { ModalService } from '../services/modal.service';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-login',
@@ -17,13 +18,15 @@ import { ModalService } from '../services/modal.service';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
+  @ViewChild('child') headerComponent!: HeaderComponent;
+
   message = '';
   constructor(
     private fb: FormBuilder,
-    private router:Router,
+    private router: Router,
     private navigationService: NavigationService,
     private utilityService: UtilityService,
-    private modalService:ModalService
+    private modalService: ModalService
   ) {}
   private modalComponentRef: any;
   ngOnInit(): void {
@@ -33,7 +36,7 @@ export class LoginComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(6),
+          Validators.minLength(8),
           Validators.maxLength(15),
         ],
       ],
@@ -44,11 +47,9 @@ export class LoginComponent implements OnInit {
     this.navigationService
       .loginUser(this.Email.value, this.PWD.value)
       .subscribe((res: any) => {
-        console.log(res);
         if (res.toString() !== 'invalid') {
           this.message = 'Logged In Successfully.';
           this.utilityService.setUser(res.toString());
-          // this.modalService.closeModal();
           this.router.navigate(['']);
         } else {
           this.message = 'Invalid Credentials!';

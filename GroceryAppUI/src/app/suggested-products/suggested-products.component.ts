@@ -20,15 +20,15 @@ export class SuggestedProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.navigationService
-    .getProducts(
-      this.category.category,
-      this.category.subCategory,
-      this.count
-    )
-    .subscribe((res: any[]) => {
-      for (let product of res) {
-        this.products.push(product);
-      }
-    });
+      .getProducts(
+        this.category.category,
+        this.category.subCategory,
+        this.count
+      )
+      .subscribe((res: any[]) => {
+        for (let product of res) {
+          this.products.push(product);
+        }
+      });
   }
 }

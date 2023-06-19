@@ -1,7 +1,7 @@
 import { Injectable, ComponentRef } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ModalService {
   private modalComponentRef!: any;

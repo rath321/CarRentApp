@@ -6,10 +6,10 @@ import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ImageService {
-    imageUrl:any;
+  imageUrl: any;
   constructor(private storage: AngularFireStorage) {}
   uploadImage(imageFile: File): Observable<any> {
     const filePath = `path/to/images/${imageFile.name}`;
@@ -18,11 +18,10 @@ export class ImageService {
 
     return uploadTask.snapshotChanges().pipe(
       finalize(async () => {
-                await new Promise(resolve => setTimeout(resolve, 6000));
+        await new Promise((resolve) => setTimeout(resolve, 6000));
         const downloadURL = await storageRef.getDownloadURL().toPromise();
-        console.log(downloadURL)
-        this.imageUrl=downloadURL;
-        return this.imageUrl
+        this.imageUrl = downloadURL;
+        return this.imageUrl;
       })
     );
   }

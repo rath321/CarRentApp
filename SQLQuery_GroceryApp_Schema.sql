@@ -1,7 +1,7 @@
 
 /* READ THIS - First Create a Database Named "ECommerce" and then Execute this File */
 
-USE [tmp-1]
+USE [ECommerce]
 GO
 /****** Object:  Table [dbo].[CartItems]    Script Date: 25-09-2022 17:30:57 ******/
 SET ANSI_NULLS ON

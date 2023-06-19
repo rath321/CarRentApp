@@ -19,19 +19,20 @@ import { OpenProductDetailsDirective } from './directives/open-product-details.d
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router'
+import { RouterModule } from '@angular/router';
 // import { JwtModule } from '@auth0/angular-jwt';
-import {JwtModule } from '@auth0/angular-jwt';
+import { JwtModule } from '@auth0/angular-jwt';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AccountComponent } from './account/account.component';
 import { AuthGuard } from './services/auth.guard';
 import { CreateProductComponent } from './create-product/create-product.component';
 import { environment } from 'src/environments/environment';
-import { AngularFireModule } from "@angular/fire/compat";
-import { AngularFireAuthModule } from "@angular/fire/compat/auth";
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { AdminGuard } from './services/admin.guard';
 @NgModule({
   declarations: [
     AppComponent,
@@ -71,10 +72,8 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
       },
     }),
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, AdminGuard],
   bootstrap: [AppComponent],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
-  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

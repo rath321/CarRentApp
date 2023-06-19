@@ -56,10 +56,10 @@ export class OrderComponent implements OnInit {
   usersPreviousCarts: Cart[] = [];
   ngOnInit(): void {
     this.navigationService
-    .getAllPreviousCarts(this.utilityService.getUser().id)
-    .subscribe((res: any) => {
-      this.usersPreviousCarts = res;
-    });
+      .getAllPreviousCarts(this.utilityService.getUser().id)
+      .subscribe((res: any) => {
+        this.usersPreviousCarts = res;
+      });
     // Get Payment Methods
     this.navigationService.getPaymentMethods().subscribe((res) => {
       this.paymentMethods = res;

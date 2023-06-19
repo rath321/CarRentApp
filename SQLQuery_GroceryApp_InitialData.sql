@@ -1,6 +1,6 @@
 /* READ THIS - First Execute Schema Only File, and then Execute this File.*/
 
-USE [tmp-1]
+USE [ECommerce]
 GO
 SET IDENTITY_INSERT [dbo].[ProductCategories] ON 
 
@@ -13,6 +13,7 @@ INSERT [dbo].[ProductCategories] ([CategoryId], [Category], [SubCategory]) VALUE
 INSERT [dbo].[ProductCategories] ([CategoryId], [Category], [SubCategory]) VALUES (7, N'Meat', N'poultry')
 INSERT [dbo].[ProductCategories] ([CategoryId], [Category], [SubCategory]) VALUES (8, N'Meat', N'Fish')
 INSERT [dbo].[ProductCategories] ([CategoryId], [Category], [SubCategory]) VALUES (9, N'fruits&Vegetables', N'flowers')
+INSERT [dbo].[ProductCategories] ([CategoryId], [Category], [SubCategory]) VALUES (10, N'Others', N'others')
 SET IDENTITY_INSERT [dbo].[ProductCategories] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Offers] ON 

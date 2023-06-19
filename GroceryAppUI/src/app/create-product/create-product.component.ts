@@ -1,40 +1,48 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { NavigationService } from '../services/navigation.service';
 import { ImageService } from '../services/image.service';
 
 @Component({
   selector: 'app-create-product',
   templateUrl: './create-product.component.html',
-  styleUrls: ['./create-product.component.css']
+  styleUrls: ['./create-product.component.css'],
 })
 export class CreateProductComponent implements OnInit {
-  mode='create';
-  routeId!:any;
+  mode = 'create';
+  routeId!: any;
   imageUrl: string | undefined;
   productForm!: FormGroup;
   categories: any[] = [
     { id: 1, category: 'Fruits and Vegetables', subCategory: 'Vegetables' },
+    { id: 9, category: 'Fruits and Vegetables', subCategory: 'flowers' },
     { id: 2, category: 'Dairy and Eggs', subCategory: 'Dairy' },
     { id: 5, category: 'Meat and Poultry', subCategory: 'Meat-1' },
     { id: 4, category: 'Fruits and Vegetables', subCategory: 'Fruits' },
     { id: 3, category: 'Dairy and Eggs', subCategory: 'Eggs' },
     { id: 7, category: 'Meat and Poultry', subCategory: 'Meat-2' },
     { id: 8, category: 'Meat and Poultry', subCategory: 'Meat-3' },
+    { id: 10, category: 'Others', subCategory: 'others' },
   ];
   offers: any[] = [
-    { id: 1, title: 'Offer 1', discount: 10 },
-    { id: 2, title: 'Offer 2', discount: 20 },
-    { id: 3, title: 'Offer 3', discount: 30 },
-    { id: 4, title: 'Offer 4', discount: 40 }
+    { id: 1, title: 'diwali sale', discount: 10 },
+    { id: 2, title: 'christmas sale', discount: 20 },
+    { id: 3, title: 'holi sale', discount: 30 },
+    { id: 4, title: 'id sale', discount: 40 },
   ];
   imageForm: any;
   selectedFile!: File;
 
-
-  constructor(public imageService:ImageService, public formBuilder: FormBuilder,private route:ActivatedRoute,private navigationService:NavigationService, private http:HttpClient) { }
+  constructor(
+    public imageService: ImageService,
+    private router: Router,
+    public formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private navigationService: NavigationService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
     this.productForm = this.formBuilder.group({
@@ -43,56 +51,51 @@ export class CreateProductComponent implements OnInit {
       description: ['', [Validators.required, Validators.maxLength(255)]],
       category: ['', [Validators.required, Validators.maxLength(100)]],
       offer: ['', Validators.required],
-     
+
       price: [0, Validators.required],
       quantity: [0, Validators.required],
-      imageName: ['', [Validators.required]]
+      imageName: ['', [Validators.required]],
     });
-  //  this.createProduct().subscribe(data=>{
-  //   console.log(data)
-  //  })
-   this.route.paramMap.subscribe((paramMap:ParamMap)=>{
-    if(paramMap.has('id')){
-      this.mode='edit';
-     this.routeId=paramMap.get('id');
-     this.navigationService.getProduct(this.routeId).subscribe((res: any) => {
-      this.productForm.patchValue({
-        title: res.title,
-        description: res.description,
-        price:res.price,
-        quantity:res.quantity,
-        imageName:res.imageName,
-        category:res.productCategory.id,
-        offer:res.offer.id
-      });
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if (paramMap.has('id')) {
+        this.mode = 'edit';
+        this.routeId = paramMap.get('id');
+        this.navigationService
+          .getProduct(this.routeId)
+          .subscribe((res: any) => {
+            this.productForm.patchValue({
+              title: res.title,
+              description: res.description,
+              price: res.price,
+              quantity: res.quantity,
+              imageName: res.imageName,
+              category: res.productCategory.id,
+              offer: res.offer.id,
+            });
+          });
+      } else {
+        this.mode = 'create';
+        this.routeId = null;
+      }
     });
-    }
-    else 
-    {
-      this.mode='create'
-      this.routeId=null;
-    }
-   })
   }
-loading=false;
+  loading = false;
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
 
     if (file) {
-     
       this.imageService.uploadImage(file).subscribe(
-      async (url) => {
+        async (url) => {
           // console.log(url)
-          this.loading=true;
+          this.loading = true;
           setTimeout(() => {
             // Handle the download URL after the delay
-            this.loading=false;
-            this.imageUrl=this.imageService.imageUrl;
-    
+            this.loading = false;
+            this.imageUrl = this.imageService.imageUrl;
+
             this.productForm.patchValue({
-              imageName:this.imageUrl
+              imageName: this.imageUrl,
             });
-            console.log(this.imageUrl)
             // Display the image using the download URL
             // ...
           }, 8000);
@@ -102,25 +105,24 @@ loading=false;
         }
       );
     }
-  
   }
-  tmp()
-  {
+  tmp() {
     console.log(this.imageService.imageUrl);
   }
-  onSubmit(form:any) {
-  if(this.mode==='create')
-  {
-    let productData={
-      id:0,
-      title:form.value.title,
-      description:form.value.description,
-      productCategory :this.categories.find(item => item.id==form.value.category),
-      offer:this.offers.find(item=>item.id==form.value.offer),
-      price:form.value.price,
-      quantity:form.value.quantity,
-      imageName:form.value.imageName
-      }
+  onSubmit(form: any) {
+    if (this.mode === 'create') {
+      let productData = {
+        id: 0,
+        title: form.value.title,
+        description: form.value.description,
+        productCategory: this.categories.find(
+          (item) => item.id == form.value.category
+        ),
+        offer: this.offers.find((item) => item.id == form.value.offer),
+        price: form.value.price,
+        quantity: form.value.quantity,
+        imageName: form.value.imageName,
+      };
       const requestBody = {
         id: 0,
         title: 'samsung',
@@ -128,25 +130,24 @@ loading=false;
         productCategory: {
           id: 1,
           category: 'string',
-          subCategory: 'string'
+          subCategory: 'string',
         },
         offer: {
           id: 1,
           title: 'string',
-          discount: 0
+          discount: 0,
         },
         price: 0,
         quantity: 0,
-        imageName: 'string'
+        imageName: 'string',
       };
-     const url = 'https://localhost:7013/api/Shopping/CreateProduct';
-     const headers = new HttpHeaders({
-       'Content-Type': 'application/json',
-       'accept': '*/*'
-     });
-  
-    this.http.post(url, productData, { headers })
-      .subscribe(
+      const url = 'https://localhost:7013/api/Shopping/CreateProduct';
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        accept: '*/*',
+      });
+
+      this.http.post(url, productData, { headers }).subscribe(
         (response) => {
           console.log('Product created successfully', response);
         },
@@ -154,59 +155,36 @@ loading=false;
           console.error('Error creating product', error);
         }
       );
+    } else {
+      this.updateProduct(this.routeId).subscribe((data) => {
+        // console.log(data)
+      });
+    }
+    // console.log(this.createProduct())
+    this.router.navigate(['']);
   }
-  else
-{
-  this.updateProduct(this.routeId).subscribe(data=>{
-    // console.log(data)
-  })
-}
-  // console.log(this.createProduct())
-  }
-  // createProduct() {
-  //   const url = 'https://localhost:7013/api/Shopping/CreateProduct';
-  //   const headers = new HttpHeaders({
-  //     'Content-Type': 'application/json',
-  //     'accept': '*/*'
-  //   });
 
-  //   const requestBody = {
-  //     id: 0,
-  //     title: 'll me',
-  //     description: 'string',
-  //     productCategory: {
-  //       id: 1,
-  //       category: 'string',
-  //       subCategory: 'string'
-  //     },
-  //     offer: {
-  //       id: 1,
-  //       title: 'string',
-  //       discount: 0
-  //     },
-  //     price: 0,
-  //     quantity: 0,
-  //     imageName: 'string'
-  //   };
-
-  //   return this.http.post(url, requestBody, { headers });
-  // }
   updateProduct(id: number) {
     const url = `https://localhost:7013/api/Shopping/UpdateProduct/${id}`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'accept': '*/*'
+      accept: '*/*',
     });
 
     const requestBody = {
       id: 0,
       title: this.productForm.value.title,
       description: this.productForm.value.description,
-      productCategory: this.categories.find(item=>item.id==this.productForm.value.category),
-      offer: this.offers.find(item=>item.id==this.productForm.value.offer),
+      productCategory: this.categories.find(
+        (item) => item.id == this.productForm.value.category
+      ),
+      offer: this.offers.find(
+        (item) => item.id == this.productForm.value.offer
+      ),
       price: this.productForm.value.price,
       quantity: this.productForm.value.quantity,
-      imageName: this.productForm.value.imageName };
+      imageName: this.productForm.value.imageName,
+    };
 
     return this.http.put(url, requestBody, { headers });
   }

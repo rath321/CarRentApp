@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "WuQoGcyiK2lgmCG+LQSJRbPaqvCM4DINjjAjRVzDurojtBDQYtgPsoAiS+m1e3Qr8jbVYWq3Jxt+CRZiby5I4A==",
+  "dgSpecHash": "Mx70EAopq74c61LfeSbZ0O9Lt4FrLD8LxvO+NwlPsA36R2XH0tzbEKVjP61SKyJ1Zffm2aPrKiPAmXgcrQsBjg==",
   "success": true,
   "projectFilePath": "C:\\Users\\nikhilrathore\\Downloads\\GroceryApp\\GroceryApp.Api\\Ecommerce.API\\Ecommerce.API.csproj",
   "expectedPackageFiles": [
@@ -45,7 +45,11 @@
     "C:\\Users\\nikhilrathore\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
     "C:\\Users\\nikhilrathore\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
     "C:\\Users\\nikhilrathore\\.nuget\\packages\\system.text.encodings.web\\4.7.2\\system.text.encodings.web.4.7.2.nupkg.sha512",
-    "C:\\Users\\nikhilrathore\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512"
+    "C:\\Users\\nikhilrathore\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512",
+    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.18\\microsoft.windowsdesktop.app.ref.6.0.18.nupkg.sha512",
+    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.18\\microsoft.netcore.app.ref.6.0.18.nupkg.sha512",
+    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.18\\microsoft.aspnetcore.app.ref.6.0.18.nupkg.sha512",
+    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.18\\microsoft.netcore.app.host.win-x64.6.0.18.nupkg.sha512"
   ],
   "logs": []
 }

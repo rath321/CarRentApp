@@ -26,7 +26,7 @@ export class ProductsComponent implements OnInit {
   filteredItems!: any[];
 
   applyFilter() {
-    this.filteredItems = this.products.filter(item =>
+    this.filteredItems = this.products.filter((item) =>
       item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
     );
   }
@@ -37,17 +37,16 @@ export class ProductsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private navigationService: NavigationService,
     public utilityService: UtilityService,
-    private http:HttpClient,
-    private router:Router
+    private http: HttpClient,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.navigationService.getProductsAll().subscribe(data=>{
-      this.filteredItems=data;
-      this.products=data;
-    })
+    this.navigationService.getProductsAll().subscribe((data) => {
+      this.filteredItems = data;
+      this.products = data;
+    });
     this.navigationService.getCategoryList().subscribe((list: Category[]) => {
-      console.log(list)
       // this.navigationList=list;
       for (let item of list) {
         let present = false;
@@ -65,7 +64,6 @@ export class ProductsComponent implements OnInit {
           });
         }
       }
-      console.log(this.navigationList)
     });
 
     this.activatedRoute.queryParams.subscribe((params: any) => {
@@ -78,18 +76,17 @@ export class ProductsComponent implements OnInit {
           .subscribe((res: any) => {
             this.products = res;
             // console.log(this.products)
-            this.filteredItems=res;
+            this.filteredItems = res;
           });
     });
   }
-  getAllProducts()
-  {
-    this.navigationService.getProductsAll().subscribe(data=>{
-      this.filteredItems=data;
-      this.products=data;
+  getAllProducts() {
+    this.navigationService.getProductsAll().subscribe((data) => {
+      this.filteredItems = data;
+      this.products = data;
       const newUrl = ''; // Replace 'new-url' with the desired URL
-  this.router.navigateByUrl(newUrl);
-    })
+      this.router.navigateByUrl(newUrl);
+    });
   }
   sortByPrice(sortKey: string) {
     this.products.sort((a, b) => {
@@ -107,29 +104,28 @@ export class ProductsComponent implements OnInit {
   }
   deleteProduct(id: number) {
     const url = `https://localhost:7013/api/Shopping/DeleteProduct/${id}`;
-    
-    this.http.delete(url)
-      .subscribe(
-        () => {
-          // Delete request successful
-          console.log('Product deleted successfully.');
-          this.activatedRoute.queryParams.subscribe((params: any) => {
-            let category = params.category;
-            let subcategory = params.subcategory;
-      
-            if (category && subcategory)
-              this.navigationService
-                .getProducts(category, subcategory, 10)
-                .subscribe((res: any) => {
-                  this.products = res;
-                  this.filteredItems=res;
-                });
-          });
-        },
-        (error) => {
-          // Error occurred
-          console.error('Failed to delete product:', error);
-        }
-      );
+
+    this.http.delete(url).subscribe(
+      () => {
+        // Delete request successful
+        console.log('Product deleted successfully.');
+        this.activatedRoute.queryParams.subscribe((params: any) => {
+          let category = params.category;
+          let subcategory = params.subcategory;
+
+          if (category && subcategory)
+            this.navigationService
+              .getProducts(category, subcategory, 10)
+              .subscribe((res: any) => {
+                this.products = res;
+                this.filteredItems = res;
+              });
+        });
+      },
+      (error) => {
+        // Error occurred
+        console.error('Failed to delete product:', error);
+      }
+    );
   }
 }

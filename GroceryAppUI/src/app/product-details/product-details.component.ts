@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Product, Review } from '../models/models';
 import { NavigationService } from '../services/navigation.service';
 import { UtilityService } from '../services/utility.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-product-details',
@@ -17,11 +18,13 @@ export class ProductDetailsComponent implements OnInit {
   showError = false;
   reviewSaved = false;
   otherReviews: Review[] = [];
+  quantityExceeded: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private navigationService: NavigationService,
-    public utilityService: UtilityService
+    public utilityService: UtilityService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -32,7 +35,39 @@ export class ProductDetailsComponent implements OnInit {
         this.fetchAllReviews();
       });
     });
+  }
+  onAddToCartCall(product: Product) {
+    this.utilityService.addToCart(product);
+    this.updateProduct(product.id).subscribe((data) => {});
+    this.activatedRoute.queryParams.subscribe((params: any) => {
+      let id = params.id;
+      this.navigationService.getProduct(id).subscribe((res: any) => {
+        this.product = res;
+        this.fetchAllReviews();
+      });
+    });
+  }
 
+  updateProduct(id: number) {
+    const url = `https://localhost:7013/api/Shopping/UpdateProduct/${id}`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+    });
+
+    const requestBody = {
+      id: this.product.id,
+      title: this.product.title,
+      description: this.product.description,
+      productCategory: this.product.productCategory,
+      offer: this.product.offer,
+      price: this.product.price,
+      quantity: this.product.quantity - 1,
+      imageName: this.product.imageName,
+    };
+    this.product.quantity -= 1;
+
+    return this.http.put(url, requestBody, { headers });
   }
 
   submitReview() {
