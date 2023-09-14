@@ -18,20 +18,16 @@ export class CreateProductComponent implements OnInit {
   categories: any[] = [
     { id: 1, category: 'MAKER', subCategory: 'MAKER-A' },
     { id: 9, category: 'MAKER', subCategory: 'MAKER-C' },
-    { id: 2, category: 'RENT PRICE', subCategory: 'rent price <1000' },
-    { id: 5, category: 'MODEL', subCategory: 'MODEL-A' },
+    { id: 11, category: 'MODEL', subCategory: 'MODEL-A' },
     { id: 4, category: 'MAKER', subCategory: 'MAKER-B' },
-    { id: 3, category: 'RENT PRICE', subCategory: 'rent price >1000 && <5000' },
-    { id: 7, category: 'MODEL', subCategory: 'MODEL-C' },
-    { id: 6, category: 'MODEL', subCategory: 'MODEL-B' },
-    { id: 8, category: 'MODEL', subCategory: 'MODEL-D' },
-    { id: 10, category: 'RENT PRICE', subCategory: 'rent price >5000' },
+    { id: 13, category: 'MODEL', subCategory: 'MODEL-C' },
+    { id: 12, category: 'MODEL', subCategory: 'MODEL-B' },
   ];
   offers: any[] = [
-    { id: 1, title: 'diwali sale', discount: 10 },
-    { id: 2, title: 'christmas sale', discount: 20 },
-    { id: 3, title: 'holi sale', discount: 30 },
-    { id: 4, title: 'id sale', discount: 40 },
+    { id: 1, title: 'MODEL-A', discount: 10 },
+    { id: 2, title: 'MODEL-B', discount: 20 },
+    { id: 3, title: 'MODEL-C', discount: 30 },
+    { id: 4, title: 'MODEL-D', discount: 40 },
   ];
   imageForm: any;
   selectedFile!: File;

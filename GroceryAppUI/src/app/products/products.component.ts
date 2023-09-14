@@ -70,14 +70,28 @@ export class ProductsComponent implements OnInit {
       let category = params.category;
       let subcategory = params.subcategory;
 
-      if (category && subcategory)
-        this.navigationService
-          .getProducts(category, subcategory, 10)
-          .subscribe((res: any) => {
-            this.products = res;
-            // console.log(this.products)
-            this.filteredItems = res;
-          });
+      if (category != 'MAKER' && category != 'MODEL') {
+        this.navigationService.getProductsAll().subscribe((data) => {
+          if (subcategory == '<1000') {
+            this.filteredItems = data.filter((items) => items.price < 1000);
+          } else if (subcategory == '>1000 && <5000') {
+            this.filteredItems = data.filter(
+              (items) => items.price > 1000 && items.price < 5000
+            );
+          } else if (subcategory == '>5000') {
+            this.filteredItems = data.filter((items) => items.price > 5000);
+          }
+        });
+      } else {
+        if (category && subcategory)
+          this.navigationService
+            .getProducts(category, subcategory, 10)
+            .subscribe((res: any) => {
+              this.products = res;
+              // console.log(this.products)
+              this.filteredItems = res;
+            });
+      }
     });
   }
   getAllProducts() {

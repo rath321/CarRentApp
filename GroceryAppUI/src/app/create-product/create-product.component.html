@@ -33,7 +33,7 @@
   </div>
 
   <div class="mb-3">
-    <label for="offerId" class="form-label">Discount Offer:</label>
+    <label for="offerId" class="form-label">Model:</label>
     <select id="offerId" class="form-select" formControlName="offer" required>
       <option *ngFor="let offer of offers" [value]="offer.id">
         {{ offer.title }}
