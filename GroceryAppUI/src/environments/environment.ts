@@ -5,18 +5,14 @@
 export const environment = {
   production: false,
   firebase: {
-    // apiKey: 'YOUR_API_KEY',
-    // authDomain: 'YOUR_AUTH_DOMAIN',
-    // projectId: 'YOUR_PROJECT_ID',
-    // storageBucket: 'YOUR_STORAGE_BUCKET',
-    // appId: 'YOUR_APP_ID'
-    apiKey: "AIzaSyBMU62yhG-Qhxa-pFDTIX04QStm7LJpDvk",
-    authDomain: "groceryapp-8f42f.firebaseapp.com",
-    projectId: "groceryapp-8f42f",
-    storageBucket: "groceryapp-8f42f.appspot.com",
-    messagingSenderId: "964835586012",
-    appId: "1:964835586012:web:8375c4b1e432d71f586919"
-  }
+    apiKey: 'AIzaSyCLDjY-wKTYhKB5Ga2ARk-iB_rKAULwtMo',
+    authDomain: 'grocery-app-13-sept.firebaseapp.com',
+    projectId: 'grocery-app-13-sept',
+    storageBucket: 'grocery-app-13-sept.appspot.com',
+    messagingSenderId: '517359855187',
+    appId: '1:517359855187:web:14698029f706b0dc13c8a6',
+    measurementId: 'G-XLG0KBZC2G',
+  },
 };
 
 /*

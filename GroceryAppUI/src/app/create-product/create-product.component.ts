@@ -16,15 +16,16 @@ export class CreateProductComponent implements OnInit {
   imageUrl: string | undefined;
   productForm!: FormGroup;
   categories: any[] = [
-    { id: 1, category: 'Fruits and Vegetables', subCategory: 'Vegetables' },
-    { id: 9, category: 'Fruits and Vegetables', subCategory: 'flowers' },
-    { id: 2, category: 'Dairy and Eggs', subCategory: 'Dairy' },
-    { id: 5, category: 'Meat and Poultry', subCategory: 'Meat-1' },
-    { id: 4, category: 'Fruits and Vegetables', subCategory: 'Fruits' },
-    { id: 3, category: 'Dairy and Eggs', subCategory: 'Eggs' },
-    { id: 7, category: 'Meat and Poultry', subCategory: 'Meat-2' },
-    { id: 8, category: 'Meat and Poultry', subCategory: 'Meat-3' },
-    { id: 10, category: 'Others', subCategory: 'others' },
+    { id: 1, category: 'MAKER', subCategory: 'MAKER-A' },
+    { id: 9, category: 'MAKER', subCategory: 'MAKER-C' },
+    { id: 2, category: 'RENT PRICE', subCategory: 'rent price <1000' },
+    { id: 5, category: 'MODEL', subCategory: 'MODEL-A' },
+    { id: 4, category: 'MAKER', subCategory: 'MAKER-B' },
+    { id: 3, category: 'RENT PRICE', subCategory: 'rent price >1000 && <5000' },
+    { id: 7, category: 'MODEL', subCategory: 'MODEL-C' },
+    { id: 6, category: 'MODEL', subCategory: 'MODEL-B' },
+    { id: 8, category: 'MODEL', subCategory: 'MODEL-D' },
+    { id: 10, category: 'RENT PRICE', subCategory: 'rent price >5000' },
   ];
   offers: any[] = [
     { id: 1, title: 'diwali sale', discount: 10 },

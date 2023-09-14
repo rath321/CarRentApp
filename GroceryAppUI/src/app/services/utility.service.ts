@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
 })
 export class UtilityService {
   changeCart = new Subject();
-
   constructor(
     private router: Router,
     private navigationService: NavigationService,
