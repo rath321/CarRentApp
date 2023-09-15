@@ -87,8 +87,8 @@ export class AllAgreementsComponent implements OnInit {
     // console.log(this.usersCart.cartItems);
   }
   onMinus(idx: any, idy: any, arrayid: any) {
-    this.activeCartArray[arrayid].quantity -= 1;
-    this.data[idx][2][idy].duration += 1;
+    this.activeCartArray[idx][idy].quantity -= 1;
+    this.data[idx][2][idy].duration -= 1;
     // console.log(this.updateItems);
   }
   onUpdate(userid: any, ind: any) {

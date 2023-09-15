@@ -59,7 +59,8 @@
               [disabled]="
                 product.quantity == 0 ||
                 !this.utilityService.isLoggedIn ||
-                duration === 0
+                duration === 0 ||
+                this.utilityService.isAdmin()
               "
               (click)="onAddToCartCall(product)"
             >

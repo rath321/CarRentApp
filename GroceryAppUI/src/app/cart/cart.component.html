@@ -82,7 +82,7 @@
               class="fa fa-minus"
               style="cursor: pointer"
               *ngIf="activeCartArray[i]?.quantity !== 0"
-              (click)="onMinus(cartItem.product.id, i)"
+              (click)="onMinus(i)"
             ></i>
           </div>
           duration
@@ -146,7 +146,7 @@
 
   <div class="mt-5 p-4 border my-rounded-corner">
     <h3 class="w-25 border text-center py-2 mb-5 my-rounded-corner">
-      Previous Orders
+      Previous Agreements
     </h3>
 
     <div class="card mb-5" *ngFor="let cart of usersPreviousCarts">

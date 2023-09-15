@@ -84,10 +84,10 @@ export class CartComponent implements OnInit {
     this.updateItems[id].duration += 1;
     // console.log(this.usersCart.cartItems);
   }
-  onMinus(id: any, arrayid: any) {
-    this.activeCartArray[arrayid].quantity -= 1;
+  onMinus(id: any) {
+    this.activeCartArray[id].quantity -= 1;
     this.updateItems[id].duration -= 1;
-    // console.log(this.updateItems);
+    // You can add an else statement here to handle cases where the objects don't exist if needed.
   }
 
   onUpdate() {

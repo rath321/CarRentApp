@@ -80,7 +80,7 @@
     class="mt-5 p-4 border my-rounded-corner"
   >
     <h3 class="w-25 border text-center py-2 mb-5 my-rounded-corner">
-      Previous Orders
+      Previous Agreements
     </h3>
 
     <div *ngFor="let cart of usersCart[3]">
@@ -91,6 +91,10 @@
         <span class="time"
           >Rented On :
           <span class="fs-5">{{ cart.orderedOn | date : "dd-MMM-YYYY" }}</span>
+        </span>
+        <span class="cartId"
+          >CartId :
+          <span class="fs-5">{{ cart.id }}</span>
         </span>
         <span class="count">Items: {{ cart.cartItems.length }}</span>
         <span class="price"
@@ -112,6 +116,7 @@
                 "
                 >delete</a
               >
+              {{ cartItem.id }}
               <app-product
                 [view]="'prevcartitem'"
                 [product]="cartItem.product"
