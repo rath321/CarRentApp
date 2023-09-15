@@ -76,14 +76,14 @@ namespace ECommerce.API.Controllers
             return Ok();
         }
 
-        [HttpGet("GetAllUsers")]
-        public IActionResult GetAllUsers()
+        [HttpGet("GetAllUsersCartItems")]
+        public IActionResult GetAllUsersCartItems()
         {
-            var result = dataAccess.GetAllUsers();
-            return Ok(result);
+            
+            return Ok();
         }
         [HttpPost("RegisterUser")]
-        public IActionResult RegisterUser([FromBody] User user)
+        public IActionResult RegisterUser([FromBody] UserCartItems user)
         {
             user.CreatedAt = DateTime.Now.ToString(DateFormat);
             user.ModifiedAt = DateTime.Now.ToString(DateFormat);
@@ -97,7 +97,7 @@ namespace ECommerce.API.Controllers
         }
 
         [HttpPost("LoginUser")]
-        public IActionResult LoginUser([FromBody] User user)
+        public IActionResult LoginUser([FromBody] UserCartItems user)
         {
             var token = dataAccess.IsUserPresent(user.Email, user.Password);
             if (token == "") token = "invalid";

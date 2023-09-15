@@ -75,6 +75,7 @@ export class CartComponent implements OnInit {
       .getAllPreviousCarts(this.utilityService.getUser().id)
       .subscribe((res: any) => {
         this.usersPreviousCarts = res;
+        console.log(res);
         this.usersPreviousCarts = this.usersPreviousCarts.reverse();
       });
   }
@@ -129,5 +130,11 @@ export class CartComponent implements OnInit {
     const options = { headers: headers };
 
     return this.http.put(url, updatedCartItems, options);
+  }
+  returnProduct(cartItemId: any, cartId: any) {
+    let tmp = {
+      cartId,
+      cartItemId,
+    };
   }
 }

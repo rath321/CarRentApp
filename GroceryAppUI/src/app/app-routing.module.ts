@@ -12,6 +12,7 @@ import { AdminGuard } from './services/admin.guard';
 import { CreateProductComponent } from './create-product/create-product.component';
 import { UtilityService } from './services/utility.service';
 import { HeaderComponent } from './header/header.component';
+import { AllAgreementsComponent } from './components/all-agreements/all-agreements.component';
 
 const routes: Routes = [
   { path: 'home', component: ProductsComponent },
@@ -49,6 +50,12 @@ const routes: Routes = [
     component: CreateProductComponent,
     canActivate: [AdminGuard],
   },
+  {
+    path: 'all-agreements',
+    component: AllAgreementsComponent,
+    canActivate: [AdminGuard],
+  },
+
   { path: '', component: ProductsComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
