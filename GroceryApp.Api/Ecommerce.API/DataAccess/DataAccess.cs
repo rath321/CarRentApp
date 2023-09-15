@@ -25,15 +25,15 @@ namespace ECommerce.API.DataAccess
         public Cart GetActiveCartOfUser(int userid)
         {
             var cart = new Cart();
-            using (SqlConnection connection = new(dbconnection))
+            using (SqlConnection connection = new SqlConnection(dbconnection))
             {
-                SqlCommand command = new()
+                SqlCommand command = new SqlCommand()
                 {
                     Connection = connection
                 };
                 connection.Open();
 
-                string query = "SELECT COUNT(*) From Carts WHERE UserId=" + userid + " AND Ordered='false';";
+                string query = "SELECT COUNT(*) FROM Carts WHERE UserId=" + userid + " AND Ordered='false';";
                 command.CommandText = query;
 
                 int count = (int)command.ExecuteScalar();
@@ -53,10 +53,11 @@ namespace ECommerce.API.DataAccess
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    CartItem item = new()
+                    CartItem item = new CartItem()
                     {
                         Id = (int)reader["CartItemId"],
-                        Product = GetProduct((int)reader["ProductId"])
+                        Product = GetProduct((int)reader["ProductId"]),
+                        Duration = reader["Duration"] == DBNull.Value ? 0 : (int)reader["Duration"]
                     };
                     cart.CartItems.Add(item);
                 }
@@ -68,6 +69,7 @@ namespace ECommerce.API.DataAccess
             }
             return cart;
         }
+
 
         //public void UpdateActiveCartOfUser(int userId, List<CartItem> updatedCartItems)
         //{
@@ -196,10 +198,13 @@ namespace ECommerce.API.DataAccess
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
+                int durationFromDB = reader["Duration"] == DBNull.Value ? 0 : (int)reader["Duration"];
+                Console.WriteLine($"Duration from DB: {durationFromDB}");
                 CartItem item = new CartItem()
                 {
                     Id = (int)reader["CartItemId"],
-                    Product = GetProduct((int)reader["ProductId"])
+                    Product = GetProduct((int)reader["ProductId"]),
+                    Duration = durationFromDB
                 };
                 cart.CartItems.Add(item);
             }
@@ -224,7 +229,7 @@ namespace ECommerce.API.DataAccess
 
         public void AddCartItems(int cartId, List<CartItem> cartItems, SqlConnection connection, SqlTransaction transaction)
         {
-            string query = "INSERT INTO CartItems (CartId, ProductId) VALUES (@CartId, @ProductId);";
+            string query = "INSERT INTO CartItems (CartId, ProductId, Duration) VALUES (@CartId, @ProductId, @Duration);";
             SqlCommand command = new SqlCommand(query, connection, transaction);
 
             foreach (CartItem cartItem in cartItems)
@@ -232,7 +237,7 @@ namespace ECommerce.API.DataAccess
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@CartId", cartId);
                 command.Parameters.AddWithValue("@ProductId", cartItem.Product.Id);
-
+                command.Parameters.AddWithValue("@Duration", cartItem.Duration);
                 command.ExecuteNonQuery();
             }
         }
@@ -279,7 +284,8 @@ namespace ECommerce.API.DataAccess
                     CartItem item = new()
                     {
                         Id = (int)reader["CartItemId"],
-                        Product = GetProduct((int)reader["ProductId"])
+                        Product = GetProduct((int)reader["ProductId"]),
+                        Duration = (int)reader["Duration"]
                     };
                     cart.CartItems.Add(item);
                 }
@@ -299,6 +305,43 @@ namespace ECommerce.API.DataAccess
             }
             return cart;
         }
+        public bool UpdateCartItemDuration(int userId, int cartId, int cartItemId, int updatedDuration)
+        {
+            using (SqlConnection connection = new SqlConnection(dbconnection))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = connection;
+
+                    // Check if the specified cart item belongs to the given user and cart
+                    string checkQuery = "SELECT COUNT(*) FROM CartItems WHERE CartItemId = @cartItemId AND CartId = @cartId;";
+                    command.CommandText = checkQuery;
+                    command.Parameters.AddWithValue("@cartItemId", cartItemId);
+                    command.Parameters.AddWithValue("@cartId", cartId);
+
+                    int cartItemCount = (int)command.ExecuteScalar();
+
+                    if (cartItemCount == 1)
+                    {
+                        // Update the duration of the specified cart item
+                        string updateQuery = "UPDATE CartItems SET Duration = @updatedDuration WHERE CartItemId = @cartItemId;";
+                        command.CommandText = updateQuery;
+                        command.Parameters.AddWithValue("@updatedDuration", updatedDuration);
+
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        return rowsAffected == 1; // Check if one row was updated
+                    }
+                    else
+                    {
+                        // The cart item does not belong to the specified user and cart
+                        return false;
+                    }
+                }
+            }
+        }
+
 
         public Offer GetOffer(int id)
         {
@@ -608,6 +651,46 @@ namespace ECommerce.API.DataAccess
             }
             return products;
         }
+        public List<Product> GetProducts1(string category, string subcategory, int count)
+        {
+            var products = new List<Product>();
+            using (SqlConnection connection = new(dbconnection))
+            {
+                SqlCommand command = new()
+                {
+                    Connection = connection
+                };
+
+                string query = "SELECT TOP " + count + " * FROM Products WHERE CategoryId=(SELECT CategoryId FROM ProductCategories WHERE Category=@c AND SubCategory=@s) ORDER BY newid();";
+                command.CommandText = query;
+                command.Parameters.Add("@c", System.Data.SqlDbType.NVarChar).Value = category;
+                command.Parameters.Add("@s", System.Data.SqlDbType.NVarChar).Value = subcategory;
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var product = new Product()
+                    {
+                        Id = (int)reader["ProductId"],
+                        Title = (string)reader["Title"],
+                        Description = (string)reader["Description"],
+                        Price = (double)reader["Price"],
+                        Quantity = (int)reader["Quantity"],
+                        ImageName = (string)reader["ImageName"]
+                    };
+
+                    var categoryid = (int)reader["CategoryId"];
+                    product.ProductCategory = GetProductCategory(categoryid);
+
+                    var offerid = (int)reader["OfferId"];
+                    product.Offer = GetOffer(offerid);
+
+                    products.Add(product);
+                }
+            }
+            return products;
+        }
         public List<Product> GetProductsAll()
         {
             var products = new List<Product>();
@@ -661,6 +744,40 @@ namespace ECommerce.API.DataAccess
             }
             return products;
         }
+        public List<User> GetAllUsers()
+        {
+            List<User> users = new List<User>();
+            using (SqlConnection connection = new SqlConnection(dbconnection))
+            {
+                SqlCommand command = new SqlCommand()
+                {
+                    Connection = connection
+                };
+
+                string query = "SELECT * FROM Users;";
+                command.CommandText = query;
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    User user = new User
+                    {
+                        Id = (int)reader["UserId"],
+                        FirstName = (string)reader["FirstName"],
+                        LastName = (string)reader["LastName"],
+                        Email = (string)reader["Email"],
+                        Address = (string)reader["Address"],
+                        Mobile = (string)reader["Mobile"],
+                        Password = (string)reader["Password"],
+                        CreatedAt = (string)reader["CreatedAt"],
+                        ModifiedAt = (string)reader["ModifiedAt"]
+                    };
+                    users.Add(user);
+                }
+            }
+            return users;
+        }
 
         public User GetUser(int id)
         {
@@ -693,37 +810,53 @@ namespace ECommerce.API.DataAccess
             return user;
         }
 
-        public bool InsertCartItem(int userId, int productId)
+        public bool InsertCartItem(int userId, int productId, int duration)
         {
-            using (SqlConnection connection = new(dbconnection))
+            using (SqlConnection connection = new SqlConnection(dbconnection))
             {
-                SqlCommand command = new()
-                {
-                    Connection = connection
-                };
-
                 connection.Open();
-                string query = "SELECT COUNT(*) FROM Carts WHERE UserId=" + userId + " AND Ordered='false';";
-                command.CommandText = query;
-                int count = (int)command.ExecuteScalar();
-                if (count == 0)
+
+                using (SqlCommand command = connection.CreateCommand())
                 {
-                    query = "INSERT INTO Carts (UserId, Ordered, OrderedOn) VALUES (" + userId + ", 'false', '');";
-                    command.CommandText = query;
+                    // Check if there is an active cart for the user
+                    string cartCheckQuery = "SELECT COUNT(*) FROM Carts WHERE UserId = @UserId AND Ordered = 'false';";
+
+                    command.CommandText = cartCheckQuery;
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    int cartCount = (int)command.ExecuteScalar();
+
+                    if (cartCount == 0)
+                    {
+                        // If no active cart exists, create one
+                        string createCartQuery = "INSERT INTO Carts (UserId, Ordered, OrderedOn) VALUES (@UserId, 'false', '');";
+
+                        command.CommandText = createCartQuery;
+                        command.ExecuteNonQuery();
+                    }
+
+                    // Get the CartId of the active cart
+                    string getCartIdQuery = "SELECT CartId FROM Carts WHERE UserId = @UserId AND Ordered = 'false';";
+
+                    command.CommandText = getCartIdQuery;
+
+                    int cartId = (int)command.ExecuteScalar();
+
+                    // Insert the new cart item
+                    string insertCartItemQuery = "INSERT INTO CartItems (CartId, ProductId, Duration) VALUES (@CartId, @ProductId, @Duration);";
+
+                    command.CommandText = insertCartItemQuery;
+                    command.Parameters.AddWithValue("@CartId", cartId);
+                    command.Parameters.AddWithValue("@ProductId", productId);
+                    command.Parameters.AddWithValue("@Duration", duration);
+
                     command.ExecuteNonQuery();
                 }
-
-                query = "SELECT CartId FROM Carts WHERE UserId=" + userId + " AND Ordered='false';";
-                command.CommandText = query;
-                int cartId = (int)command.ExecuteScalar();
-
-
-                query = "INSERT INTO CartItems (CartId, ProductId) VALUES (" + cartId + ", " + productId + ");";
-                command.CommandText = query;
-                command.ExecuteNonQuery();
-                return true;
             }
+
+            return true;
         }
+
 
         public int InsertOrder(Order order)
         {

@@ -112,7 +112,7 @@
         class="card-header d-flex fw-bold justify-content-between align-items-center"
       >
         <span class="time"
-          >Ordered On :
+          >Rented On :
           <span class="fs-5">{{ cart.orderedOn | date : "dd-MMM-YYYY" }}</span>
         </span>
         <span class="count">Items: {{ cart.cartItems.length }}</span>
@@ -127,10 +127,17 @@
       <div class="cart-body px-4 py-2">
         <div class="row g-0">
           <div class="col-2 px-2 py-2" *ngFor="let cartItem of cart.cartItems">
-            <app-product
-              [view]="'prevcartitem'"
-              [product]="cartItem.product"
-            ></app-product>
+            <div style="text-align: center">
+              <app-product
+                [view]="'prevcartitem'"
+                [product]="cartItem.product"
+              ></app-product>
+
+              <div style="text-align: center">
+                {{ cartItem.duration }}
+              </div>
+              days
+            </div>
           </div>
         </div>
       </div>

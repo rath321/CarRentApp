@@ -48,7 +48,7 @@
         routerLink="/cart"
         *ngIf="utilityService.isLoggedIn() && !utilityService.isAdmin()"
       >
-        Agreement Cart
+        Rental Agreements
         <span class="badge bg-warning text-dark">{{ cartItems }}</span>
       </button>
       <button
@@ -57,7 +57,7 @@
         routerLink="/orders"
         *ngIf="utilityService.isLoggedIn() && !utilityService.isAdmin()"
       >
-        Agreement Order
+        Order Agreement
       </button>
       <button
         type="button"

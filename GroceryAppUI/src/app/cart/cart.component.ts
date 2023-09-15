@@ -59,7 +59,7 @@ export class CartComponent implements OnInit {
         // console.log(this.usersCart.cartItems[0]);
         for (var i = 0; i < len; i++) {
           this.activeCartArray.push({
-            quantity: 1,
+            quantity: this.usersCart.cartItems[i].duration,
             id: this.usersCart.cartItems[i].product.id,
           });
         }
@@ -75,59 +75,50 @@ export class CartComponent implements OnInit {
       .getAllPreviousCarts(this.utilityService.getUser().id)
       .subscribe((res: any) => {
         this.usersPreviousCarts = res;
+        this.usersPreviousCarts = this.usersPreviousCarts.reverse();
       });
   }
   onPlus(id: any) {
-    console.log(this.updateItems);
-    // console.log(this.usersCart.cartItems);
     this.activeCartArray[id].quantity += 1;
-    const tmp = this.usersCart.cartItems[id];
-    this.updateItems.push(tmp);
-    console.log(this.updateItems);
+    this.updateItems[id].duration += 1;
     // console.log(this.usersCart.cartItems);
   }
   onMinus(id: any, arrayid: any) {
     this.activeCartArray[arrayid].quantity -= 1;
-
-    let cnt = 0;
-    this.updateItems = this.updateItems.filter((item: any) => {
-      // console.log(item.product.id, id);
-      if (item.product.id === id && cnt == 0) {
-        cnt++;
-        return false;
-      }
-      return true;
-    });
+    this.updateItems[id].duration -= 1;
     // console.log(this.updateItems);
   }
 
   onUpdate() {
+    console.log(this.updateItems);
     this.updateActiveCartOfUser(
       this.usersCart.user.id,
       this.updateItems
-    ).subscribe((res) => {
-      this.updateItems = [];
-      this.activeCartArray = [];
-      this.navigationService
-        .getActiveCartOfUser(this.utilityService.getUser().id)
-        .subscribe((res: any) => {
-          this.usersCart = res;
-          let len = this.usersCart.cartItems.length;
-          this.updateItems = this.usersCart.cartItems;
-          // console.log(this.usersCart.cartItems[0]);
-          for (var i = 0; i < len; i++) {
-            this.activeCartArray.push({
-              quantity: 1,
-              id: this.usersCart.cartItems[i].product.id,
-            });
-          }
-          // Calculate Payment
-          this.utilityService.calculatePayment(
-            this.usersCart,
-            this.usersPaymentInfo
-          );
-        });
-    });
+    ).subscribe(
+      (res) => {
+        this.navigationService
+          .getActiveCartOfUser(this.utilityService.getUser().id)
+          .subscribe((res: any) => {
+            this.usersCart = res;
+            console.log(this.usersCart);
+            let len = this.usersCart.cartItems.length;
+            this.updateItems = this.usersCart.cartItems;
+
+            // console.log(this.usersCart.cartItems[0]);
+            for (var i = 0; i < len; i++) {
+              this.activeCartArray[i].quantity = this.updateItems[i].duration;
+            }
+            // Calculate Payment
+            this.utilityService.calculatePayment(
+              this.usersCart,
+              this.usersPaymentInfo
+            );
+          });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
   updateActiveCartOfUser(userId: number, updatedCartItems: any[]) {
     const url = `https://localhost:7013/api/Shopping/UpdateActiveCartOfUser/${userId}`;

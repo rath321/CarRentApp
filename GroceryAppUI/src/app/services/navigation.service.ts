@@ -84,8 +84,8 @@ export class NavigationService {
     return this.http.get(url);
   }
 
-  addToCart(userid: number, productid: number) {
-    let url = this.baseurl + 'InsertCartItem/' + userid + '/' + productid;
+  addToCart(userid: number, productid: number, duration:number) {
+    let url = this.baseurl + 'InsertCartItem/' + userid + '/' + productid+'/'+duration;
     return this.http.post(url, null, { responseType: 'text' });
   }
 

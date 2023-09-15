@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Subject, window } from 'rxjs';
-import { Cart, Payment, Product, User } from '../models/models';
+import { Cart, Payment, Product, ProductCart, User } from '../models/models';
 import { NavigationService } from './navigation.service';
 import { Router } from '@angular/router';
 
@@ -56,11 +56,11 @@ export class UtilityService {
     this.router.navigate(['']);
   }
 
-  addToCart(product: Product) {
+  addToCart(product: Product, duration: number) {
     let productid = product.id;
     let userid = this.getUser().id;
     this.navigationService
-      .addToCart(userid, productid)
+      .addToCart(userid, productid, duration)
       .subscribe((res: any) => {
         if (res.toString() === 'inserted') this.changeCart.next(1);
       });
@@ -70,19 +70,18 @@ export class UtilityService {
     payment.totalAmount = 0;
     payment.amountPaid = 0;
     payment.amountReduced = 0;
-
     for (let cartitem of cart.cartItems) {
-      payment.totalAmount += cartitem.product.price;
+      payment.totalAmount += cartitem.product.price * cartitem.duration;
 
       payment.amountReduced +=
-        cartitem.product.price -
+        cartitem.product.price * cartitem.duration -
         this.applyDiscount(
-          cartitem.product.price,
+          cartitem.product.price * cartitem.duration,
           cartitem.product.offer.discount
         );
 
       payment.amountPaid += this.applyDiscount(
-        cartitem.product.price,
+        cartitem.product.price * cartitem.duration,
         cartitem.product.offer.discount
       );
     }

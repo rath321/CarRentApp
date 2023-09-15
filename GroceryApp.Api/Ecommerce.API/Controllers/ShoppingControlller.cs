@@ -76,7 +76,12 @@ namespace ECommerce.API.Controllers
             return Ok();
         }
 
-
+        [HttpGet("GetAllUsers")]
+        public IActionResult GetAllUsers()
+        {
+            var result = dataAccess.GetAllUsers();
+            return Ok(result);
+        }
         [HttpPost("RegisterUser")]
         public IActionResult RegisterUser([FromBody] User user)
         {
@@ -114,10 +119,10 @@ namespace ECommerce.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost("InsertCartItem/{userid}/{productid}")]
-        public IActionResult InsertCartItem(int userid, int productid)
+        [HttpPost("InsertCartItem/{userid}/{productid}/{Duration}")]
+        public IActionResult InsertCartItem(int userid, int productid, int Duration)
         {
-            var result = dataAccess.InsertCartItem(userid, productid);
+            var result = dataAccess.InsertCartItem(userid, productid, Duration);
             return Ok(result ? "inserted" : "not inserted");
         }
       
@@ -150,7 +155,11 @@ namespace ECommerce.API.Controllers
             var result = dataAccess.GetAllPreviousCartsOfUser(id);
             return Ok(result);
         }
-
+        [HttpPut("UpdateCartItemDuration/{userId}/{updatedDuration}")]
+        public IActionResult updateCartItemDuration(int userId, int cartId, int cartItemId, int updatedDuration)
+        {
+            return Ok();
+        }
         [HttpGet("GetPaymentMethods")]
         public IActionResult GetPaymentMethods()
         {

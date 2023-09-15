@@ -1,0 +1,31 @@
+  /* Card container */
+  .user-card {
+      width: 300px;
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin: 20px;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    margin-left: 37%;
+  }
+
+  /* User name */
+  .user-name {
+      font-size: 18px;
+      font-weight: bold;
+  }
+
+  /* Other user information */
+  .user-info {
+      margin-top: 10px;
+  }
+
+  /* Label for user information */
+  .info-label {
+      font-weight: bold;
+  }
+
+  /* User address, email, and mobile number */
+  .info-text {
+      margin-top: 5px;
+  }
