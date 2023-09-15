@@ -1,4 +1,5 @@
-﻿using ECommerce.API.Models;
+﻿using Ecommerce.API.Models;
+using ECommerce.API.Models;
 using System.Data.SqlClient;
 
 namespace ECommerce.API.DataAccess
@@ -25,8 +26,12 @@ namespace ECommerce.API.DataAccess
         void InsertReview(Review review);
         List<Review> GetProductReviews(int productId);
         User GetUser(int id);
+        public bool DeleteCartItem(int cartId, int cartItemId);
+        public List<toBeDeleted> GetAllToBeDeletedItems();
         bool InsertCartItem(int userId, int productId, int Duration);
         Cart GetActiveCartOfUser(int userid);
+        public List<User> GetAllUsers();
+        public void InsertToBeDeletedItem(int cartId, int cartItemId);
         Cart GetCart(int cartid);
         List<Cart> GetAllPreviousCartsOfUser(int userid);
         List<PaymentMethod> GetPaymentMethods();

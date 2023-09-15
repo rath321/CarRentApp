@@ -136,5 +136,8 @@ export class CartComponent implements OnInit {
       cartId,
       cartItemId,
     };
+    this.navigationService.returnProductAddition(tmp).subscribe((res) => {
+      console.log(res);
+    });
   }
 }

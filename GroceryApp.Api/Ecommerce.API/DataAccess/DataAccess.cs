@@ -1,4 +1,5 @@
-﻿using ECommerce.API.Models;
+﻿using Ecommerce.API.Models;
+using ECommerce.API.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -651,6 +652,52 @@ namespace ECommerce.API.DataAccess
             }
             return products;
         }
+
+        public void InsertToBeDeletedItem(int cartId, int cartItemId)
+        {
+            using (SqlConnection connection = new SqlConnection(dbconnection))
+            {
+                connection.Open();
+                string insertQuery = "INSERT INTO toBeDeletedItems (cartId, cartItemId) VALUES (@CartId, @CartItemId)";
+                using (SqlCommand command = new SqlCommand(insertQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@CartId", cartId);
+                    command.Parameters.AddWithValue("@CartItemId", cartItemId);
+                    command.ExecuteNonQuery();
+                }
+            }
+           
+        }
+        public List<toBeDeleted> GetAllToBeDeletedItems()
+        {
+            List<toBeDeleted> toBeDeletedItems = new List<toBeDeleted>();
+
+            using (SqlConnection connection = new SqlConnection(dbconnection))
+            {
+                connection.Open();
+                string selectQuery = "SELECT * FROM toBeDeletedItems";
+
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            toBeDeleted item = new toBeDeleted
+                            {
+                               cartId = (int)reader["cartId"],
+                               cartItemId = (int)reader["cartItemId"]
+                            };
+                            toBeDeletedItems.Add(item);
+                        }
+                    }
+                }
+            }
+
+            return toBeDeletedItems;
+        }
+
+
         public List<Product> GetProducts1(string category, string subcategory, int count)
         {
             var products = new List<Product>();
@@ -857,6 +904,41 @@ namespace ECommerce.API.DataAccess
             return true;
         }
 
+        public bool DeleteCartItem(int cartId, int cartItemId)
+        {
+            using (SqlConnection connection = new SqlConnection(dbconnection))
+            {
+                connection.Open();
+
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    // Check if the cart item exists in the specified cart
+                    string checkCartItemQuery = "SELECT COUNT(*) FROM CartItems WHERE CartId = @CartId AND CartItemId = @CartItemId;";
+
+                    command.CommandText = checkCartItemQuery;
+                    command.Parameters.AddWithValue("@CartId", cartId);
+                    command.Parameters.AddWithValue("@CartItemId", cartItemId);
+
+                    int cartItemCount = (int)command.ExecuteScalar();
+
+                    if (cartItemCount == 1)
+                    {
+                        // If the cart item exists, delete it
+                        string deleteCartItemQuery = "DELETE FROM CartItems WHERE CartId = @CartId AND CartItemId = @CartItemId;";
+
+                        command.CommandText = deleteCartItemQuery;
+                        command.ExecuteNonQuery();
+
+                        return true; // Item deleted successfully
+                    }
+                    else
+                    {
+                        // If the cart item doesn't exist or there are multiple matching items (unexpected), return false or handle as needed
+                        return false; // Item not found or unexpected situation
+                    }
+                }
+            }
+        }
 
         public int InsertOrder(Order order)
         {

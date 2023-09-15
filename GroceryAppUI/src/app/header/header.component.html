@@ -71,9 +71,26 @@
         type="button"
         class="btn btn-outline-light"
         [routerLink]="['account']"
-        *ngIf="utilityService.isLoggedIn()"
+        *ngIf="utilityService.isLoggedIn() && !utilityService.isAdmin()"
       >
         Account
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-light"
+        [routerLink]="['account']"
+        *ngIf="utilityService.isLoggedIn() && utilityService.isAdmin()"
+      >
+        Admin
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-light"
+        routerLink="account"
+        *ngIf="utilityService.isLoggedIn() && utilityService.isAdmin()"
+      >
+        Notifications
       </button>
       <button
         type="button"
@@ -82,14 +99,6 @@
         *ngIf="utilityService.isLoggedIn()"
       >
         Logout
-      </button>
-      <button
-        type="button"
-        class="btn btn-outline-light"
-        routerLink="account"
-        *ngIf="utilityService.isLoggedIn()"
-      >
-        Help
       </button>
     </div>
   </div>

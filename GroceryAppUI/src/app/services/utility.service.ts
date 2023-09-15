@@ -21,11 +21,7 @@ export class UtilityService {
     let finalPrice: number = price - price * (discount / 100);
     return finalPrice;
   }
-  returnProductAddition(itemKeys: any) {
-    this.toBeDeleted.push(itemKeys);
-  }
-  // JWT Helper Service : npm install @auth0/angular-jwt
-  returnProductDeletion(cartItemId: any, cartId: any) {}
+  
   getUser(): User {
     let token = this.jwt.decodeToken();
     let user: User = {

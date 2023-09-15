@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public PaymentMethod PaymentMethod { get; set; } = new PaymentMethod();
-        public UserCartItems User { get; set; } = new UserCartItems();
+        public User User { get; set; } = new User();
         public int TotalAmount { get; set; }
         public int ShipingCharges { get; set; }
         public int AmountReduced { get; set; }
