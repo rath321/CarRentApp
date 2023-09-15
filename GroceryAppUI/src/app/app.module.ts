@@ -33,6 +33,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AdminGuard } from './services/admin.guard';
+import { AllAgreementsComponent } from './components/all-agreements/all-agreements.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,6 +53,7 @@ import { AdminGuard } from './services/admin.guard';
     LoginComponent,
     AccountComponent,
     CreateProductComponent,
+    AllAgreementsComponent,
   ],
   imports: [
     BrowserModule,

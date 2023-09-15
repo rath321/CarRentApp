@@ -59,6 +59,7 @@ export class OrderComponent implements OnInit {
       .getAllPreviousCarts(this.utilityService.getUser().id)
       .subscribe((res: any) => {
         this.usersPreviousCarts = res;
+        this.usersPreviousCarts = this.usersPreviousCarts.reverse();
       });
     // Get Payment Methods
     this.navigationService.getPaymentMethods().subscribe((res) => {
@@ -130,14 +131,44 @@ export class OrderComponent implements OnInit {
     let pmid = 0;
     if (this.selectedPaymentMethod.value)
       pmid = parseInt(this.selectedPaymentMethod.value);
-
+    let tmp = {
+      id: 0,
+      paymentMethod: {
+        id: 6,
+        type: 'string',
+        provider: 'string',
+        available: true,
+        reason: 'string',
+      },
+      user: {
+        id: 3,
+        firstName: 'string',
+        lastName: 'string',
+        email: 'string',
+        address: 'string',
+        mobile: 'string',
+        password: 'string',
+        createdAt: 'string',
+        modifiedAt: 'string',
+      },
+      totalAmount: 0,
+      shipingCharges: 0,
+      amountReduced: 0,
+      amountPaid: 0,
+      createdAt: 'string',
+    };
+    console.log(
+      this.usersPaymentInfo.totalAmount,
+      this.usersPaymentInfo.shipingCharges,
+      this.usersPaymentInfo.amountReduced
+    );
     payment = {
       id: 0,
       paymentMethod: {
         id: pmid,
         type: '',
         provider: '',
-        available: false,
+        available: true,
         reason: '',
       },
       user: this.utilityService.getUser(),
@@ -147,10 +178,9 @@ export class OrderComponent implements OnInit {
       amountPaid: this.usersPaymentInfo.amountPaid,
       createdAt: '',
     };
-
-    this.navigationService
-      .insertPayment(payment)
-      .subscribe((paymentResponse: any) => {
+    console.log(payment);
+    this.navigationService.insertPayment(payment).subscribe(
+      (paymentResponse: any) => {
         payment.id = parseInt(paymentResponse);
         let order: Order = {
           id: 0,
@@ -162,6 +192,10 @@ export class OrderComponent implements OnInit {
         this.navigationService.insertOrder(order).subscribe((orderResponse) => {
           this.utilityService.changeCart.next(0);
         });
-      });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }

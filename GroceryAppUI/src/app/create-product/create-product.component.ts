@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { NavigationService } from '../services/navigation.service';
@@ -38,7 +38,8 @@ export class CreateProductComponent implements OnInit {
     public formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private navigationService: NavigationService,
-    private http: HttpClient
+    private http: HttpClient,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {

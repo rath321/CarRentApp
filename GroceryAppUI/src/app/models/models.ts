@@ -44,7 +44,17 @@ export interface Product {
   quantity: number;
   imageName: string;
 }
-
+export interface ProductCart {
+  id: number;
+  title: string;
+  description: string;
+  productCategory: Category;
+  offer: Offer;
+  price: number;
+  quantity: number;
+  duration: number;
+  imageName: string;
+}
 export interface Review {
   id: number;
   user: User;
@@ -58,6 +68,7 @@ export interface Review {
 // #region Cart
 
 export interface CartItem {
+  duration: number;
   id: number;
   product: Product;
 }

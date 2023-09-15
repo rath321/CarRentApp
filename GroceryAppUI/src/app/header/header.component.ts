@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ComponentRef,
   ElementRef,
@@ -34,7 +35,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private navigationService: NavigationService,
     public utilityService: UtilityService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private changeDetector: ChangeDetectorRef
   ) {}
   private modalComponentRef!: ComponentRef<any>;
   ngOnInit(): void {
@@ -65,7 +67,7 @@ export class HeaderComponent implements OnInit {
         .getActiveCartOfUser(this.utilityService.getUser().id)
         .subscribe((res: any) => {
           this.cartItems = res.cartItems.length;
-          // console.log(this.cartItems);
+          this.changeDetector.detectChanges(); // Trigger change detection
         });
     }
 

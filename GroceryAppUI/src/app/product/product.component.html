@@ -40,9 +40,10 @@
         type="button"
         class="btn btn-outline-success"
         [disabled]="!utilityService.isLoggedIn()"
-        (click)="this.utilityService.addToCart(product)"
+        (click)="this.utilityService.addToCart(product, 1)"
       >
-        Add to Cart
+        Add to Cart 1
+
         <span *ngIf="!utilityService.isLoggedIn()">(Login First)</span>
       </button>
     </div>
@@ -86,9 +87,9 @@
             }}
             <span class="text-primary"> -{{ product.offer.discount }}% </span>
           </h2>
-          <h5 class="card-subtitle text-danger text-decoration-line-through">
+          <!-- <h5 class="card-subtitle text-danger text-decoration-line-through">
             {{ product.price }}
-          </h5>
+          </h5> -->
         </div>
 
         <div class="card-footer text-muted d-grid gap-2">
@@ -96,9 +97,9 @@
             type="button"
             class="btn btn-outline-success"
             [disabled]="!utilityService.isLoggedIn()"
-            (click)="this.utilityService.addToCart(product)"
+            (click)="this.utilityService.addToCart(product, 1)"
           >
-            Add to Cart
+            Add to Cart 1
             <span *ngIf="!utilityService.isLoggedIn()">(Login First)</span>
           </button>
         </div>
@@ -127,17 +128,8 @@
         <div class="card-body">
           <h5 class="card-title title">{{ product.title }}</h5>
           <h5 class="card-title text-success">
-            {{
-              utilityService.applyDiscount(
-                product.price,
-                product.offer.discount
-              )
-            }}
-            <span class="text-primary"> -{{ product.offer.discount }}% </span>
-          </h5>
-          <h6 class="card-subtitle text-danger text-decoration-line-through">
             {{ product.price }}
-          </h6>
+          </h5>
         </div>
       </div>
     </div>

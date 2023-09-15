@@ -19,7 +19,7 @@ export class ProductDetailsComponent implements OnInit {
   reviewSaved = false;
   otherReviews: Review[] = [];
   quantityExceeded: boolean = false;
-
+  duration: number = 0;
   constructor(
     private activatedRoute: ActivatedRoute,
     private navigationService: NavigationService,
@@ -37,13 +37,14 @@ export class ProductDetailsComponent implements OnInit {
     });
   }
   onAddToCartCall(product: Product) {
-    this.utilityService.addToCart(product);
-    this.updateProduct(product.id).subscribe((data) => {});
-    this.activatedRoute.queryParams.subscribe((params: any) => {
-      let id = params.id;
-      this.navigationService.getProduct(id).subscribe((res: any) => {
-        this.product = res;
-        this.fetchAllReviews();
+    // Call the addToCart method, which may not return an observable.
+    this.utilityService.addToCart(product, this.duration);
+    this.updateProduct(product.id).subscribe((data) => {
+      this.activatedRoute.queryParams.subscribe((params: any) => {
+        let id = params.id;
+        this.navigationService.getProduct(id).subscribe((res: any) => {
+          this.product = res;
+        });
       });
     });
   }

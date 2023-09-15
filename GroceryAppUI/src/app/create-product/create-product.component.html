@@ -88,10 +88,20 @@
       style="width: 70px; height: 70px"
     />
   </div>
-  <button type="submit" *ngIf="mode === 'create'" class="btn btn-primary">
+  <button
+    [disabled]="!productForm.valid"
+    type="submit"
+    *ngIf="mode === 'create'"
+    class="btn btn-primary"
+  >
     Create Product
   </button>
-  <button type="submit" *ngIf="mode === 'edit'" class="btn btn-primary">
+  <button
+    [disabled]="!productForm.valid"
+    type="submit"
+    *ngIf="mode === 'edit'"
+    class="btn btn-primary"
+  >
     Update Product
   </button>
 </form>

@@ -8,3 +8,31 @@
 .image-thumbnails>img:hover {
     transform: scale(1.08);
 }
+/* Define a class for the styled input */
+.styled-input {
+    border: 2px solid #ccc;
+    /* Add a border */
+    border-radius: 4px;
+    /* Add rounded corners */
+    padding: 10px;
+    /* Add padding inside the input */
+    font-size: 16px;
+    margin-bottom: 10px;
+    /* Adjust the font size */
+    width: 100%;
+    /* Make the input width 100% of its container */
+    transition: border-color 0.3s ease-in-out;
+    /* Add a smooth transition effect for the border color */
+
+    /* You can add more styles as needed */
+}
+
+/* Add a style when the input is focused */
+.styled-input:focus {
+    border-color: #007bff;
+    /* Change the border color on focus */
+    outline: none;
+    /* Remove the default focus outline (optional) */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    /* Add a subtle box shadow on focus */
+}
