@@ -17,7 +17,6 @@ namespace ECommerce.API.DataAccess
         public void ClearCartItems(int cartId, SqlConnection connection, SqlTransaction transaction);
         public void AddCartItems(int cartId, List<CartItem> cartItems, SqlConnection connection, SqlTransaction transaction);
         Product CreateProduct(Product product);
-        public List<User> GetAllUsers();
         public Cart GetActiveCartOfUser1(int userId, SqlConnection connection, SqlTransaction transaction);
         Product UpdateProduct(int id, Product product);
         void DeleteProduct(int id);
