@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Product } from 'src/app/models/models';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { UtilityService } from 'src/app/services/utility.service';
 
@@ -50,6 +51,32 @@ export class AllAgreementsComponent implements OnInit {
       console.log(this.data);
       console.log(this.activeCartArray);
     });
+  }
+  deleteProduct(cartItemId: any, cartId: any, id: any) {
+    let tmp: Product;
+    this.navigationService
+      .returnProductDeletion(cartItemId, cartId)
+      .subscribe((res) => {
+        this.navigationService.getProduct(id).subscribe((res: any) => {
+          tmp = res;
+          console.log(res);
+          console.log(res.quantity);
+          tmp.quantity += 1;
+          console.log(tmp.quantity);
+          this.updateProduct(id, tmp).subscribe((res) => {
+            console.log(res);
+            this.refreshPage();
+          });
+        });
+      });
+  }
+  updateProduct(id: number, product: Product) {
+    const url = `https://localhost:7013/api/Shopping/UpdateProduct/${id}`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+    });
+    return this.http.put(url, product, { headers });
   }
   onPlus(idx: any, idy: any) {
     this.activeCartArray[idx][idy].quantity += 1;

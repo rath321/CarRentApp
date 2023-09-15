@@ -84,8 +84,15 @@ export class NavigationService {
     return this.http.get(url);
   }
 
-  addToCart(userid: number, productid: number, duration:number) {
-    let url = this.baseurl + 'InsertCartItem/' + userid + '/' + productid+'/'+duration;
+  addToCart(userid: number, productid: number, duration: number) {
+    let url =
+      this.baseurl +
+      'InsertCartItem/' +
+      userid +
+      '/' +
+      productid +
+      '/' +
+      duration;
     return this.http.post(url, null, { responseType: 'text' });
   }
 
@@ -97,7 +104,24 @@ export class NavigationService {
     let url = this.baseurl + 'UpdateActiveCartOfUser/' + userid;
     // return this.http.post(url);
   }
-
+  returnProductAddition(itemKeys: any) {
+    let url =
+      this.baseurl +
+      'ToBeDeleted/' +
+      itemKeys.cartItemId +
+      '/' +
+      itemKeys.cartId;
+    return this.http.post(url, null);
+  }
+  returnToBeDeletedProduct() {
+    let url = this.baseurl + 'ToBeDeleted/';
+    return this.http.get(url);
+  }
+  // JWT Helper Service : npm install @auth0/angular-jwt
+  returnProductDeletion(cartItemId: any, cartId: any) {
+    let url = this.baseurl + 'DeleteCartItem/' + cartItemId + '/' + cartId;
+    return this.http.delete(url);
+  }
   getAllPreviousCarts(userid: number) {
     let url = this.baseurl + 'GetAllPreviousCartsOfUser/' + userid;
     return this.http.get(url);

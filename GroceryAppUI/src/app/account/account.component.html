@@ -1,2 +1,22 @@
-<h1>Hi {{userName}} 👋👋</h1>
-<h4 *ngIf="utilityService.isLoggedIn() && utilityService.isAdmin()">🔴 This is an Admin Account</h4>
+<h1>Hi {{ userName }} 👋👋</h1>
+<h4 *ngIf="utilityService.isLoggedIn() && utilityService.isAdmin()">
+  🔴 This is an Admin Account
+</h4>
+<h4 style="color: red">Notifications</h4>
+<span>To Be Returned</span>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Cart ID</th>
+      <th scope="col">Cart Item ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let val of toBeDeleted; index as i">
+      <th scope="row">{{ i }}</th>
+      <td>{{ val.cartId }}</td>
+      <td>{{ val.cartItemId }}</td>
+    </tr>
+  </tbody>
+</table>

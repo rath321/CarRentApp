@@ -1,4 +1,5 @@
-﻿using ECommerce.API.DataAccess;
+﻿using Ecommerce.API.Models;
+using ECommerce.API.DataAccess;
 using ECommerce.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,7 +55,39 @@ namespace ECommerce.API.Controllers
             // Return the created product
             return Ok(createdProduct);
         }
+        [HttpPost("ToBeDeleted/{cartItemId}/{cartId}")]
+        public IActionResult ToBeDeleted(int cartItemId, int cartId)
+        {
+            // Perform validation and error handling if needed
+            // Assuming the Product object is passed in the request body
 
+             dataAccess.InsertToBeDeletedItem(cartItemId, cartId);
+
+            // Return the created product
+            return Ok();
+        }
+        [HttpGet("ToBeDeleted")]
+        public IActionResult ToBeDeletedGet(int cartItemId, int cartId)
+        {
+            // Perform validation and error handling if needed
+            // Assuming the Product object is passed in the request body
+
+            List<toBeDeleted> tmp= dataAccess.GetAllToBeDeletedItems();
+
+            // Return the created product
+            return Ok(tmp);
+        }
+        [HttpGet("GetAllUsers")]
+        public IActionResult GetAllUsers()
+        {
+            // Perform validation and error handling if needed
+            // Assuming the Product object is passed in the request body
+
+            List<User> tmp = dataAccess.GetAllUsers();
+
+            // Return the created product
+            return Ok(tmp);
+        }
         [HttpPut("UpdateProduct/{id}")]
         public IActionResult UpdateProduct(int id, Product product)
         {
@@ -75,7 +108,14 @@ namespace ECommerce.API.Controllers
             // Return a success response
             return Ok();
         }
+        [HttpDelete("DeleteCartItem/{cartItemId}/{cartId}/")]
+        public IActionResult DeleteCartItem(int cartItemId, int cartId)
+        {
+            dataAccess.DeleteCartItem(cartId,cartItemId);
 
+            // Return a success response
+            return Ok();
+        }
         [HttpGet("GetAllUsersCartItems")]
         public IActionResult GetAllUsersCartItems()
         {
@@ -83,7 +123,7 @@ namespace ECommerce.API.Controllers
             return Ok();
         }
         [HttpPost("RegisterUser")]
-        public IActionResult RegisterUser([FromBody] UserCartItems user)
+        public IActionResult RegisterUser([FromBody] User user)
         {
             user.CreatedAt = DateTime.Now.ToString(DateFormat);
             user.ModifiedAt = DateTime.Now.ToString(DateFormat);
@@ -97,7 +137,7 @@ namespace ECommerce.API.Controllers
         }
 
         [HttpPost("LoginUser")]
-        public IActionResult LoginUser([FromBody] UserCartItems user)
+        public IActionResult LoginUser([FromBody] User user)
         {
             var token = dataAccess.IsUserPresent(user.Email, user.Password);
             if (token == "") token = "invalid";
