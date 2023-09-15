@@ -61,7 +61,7 @@ namespace ECommerce.API.Controllers
             // Perform validation and error handling if needed
             // Assuming the Product object is passed in the request body
 
-             dataAccess.InsertToBeDeletedItem(cartItemId, cartId);
+             dataAccess.InsertToBeDeletedItem(cartId, cartItemId);
 
             // Return the created product
             return Ok();
@@ -76,6 +76,17 @@ namespace ECommerce.API.Controllers
 
             // Return the created product
             return Ok(tmp);
+        }
+        [HttpDelete("DeleteToBeDeleted/{cartItemId}/{cartId}")]
+        public IActionResult DeleteToBeDeleted(int cartItemId, int cartId)
+        {
+            // Perform validation and error handling if needed
+            // Assuming the Product object is passed in the request body
+
+             dataAccess.DeleteToBeDeletedItem(cartId, cartItemId);
+
+            // Return the created product
+            return Ok();
         }
         [HttpGet("GetAllUsers")]
         public IActionResult GetAllUsers()

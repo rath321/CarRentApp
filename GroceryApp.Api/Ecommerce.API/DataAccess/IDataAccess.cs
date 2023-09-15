@@ -24,6 +24,7 @@ namespace ECommerce.API.DataAccess
         bool InsertUser(User user);
         string IsUserPresent(string email, string password);
         void InsertReview(Review review);
+        public bool DeleteToBeDeletedItem(int cartId, int cartItemId);
         List<Review> GetProductReviews(int productId);
         User GetUser(int id);
         public bool DeleteCartItem(int cartId, int cartItemId);

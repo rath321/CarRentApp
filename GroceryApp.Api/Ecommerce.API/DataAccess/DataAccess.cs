@@ -668,6 +668,24 @@ namespace ECommerce.API.DataAccess
             }
            
         }
+        public bool DeleteToBeDeletedItem(int cartId, int cartItemId)
+        {
+            using (SqlConnection connection = new SqlConnection(dbconnection))
+            {
+                connection.Open();
+                string deleteQuery = "DELETE FROM toBeDeletedItems WHERE cartId = @CartId AND cartItemId = @CartItemId;";
+                using (SqlCommand command = new SqlCommand(deleteQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@CartId", cartId);
+                    command.Parameters.AddWithValue("@CartItemId", cartItemId);
+
+                    int rowsAffected = command.ExecuteNonQuery();
+
+                    return rowsAffected > 0; // Return true if at least one row was deleted
+                }
+            }
+        }
+
         public List<toBeDeleted> GetAllToBeDeletedItems()
         {
             List<toBeDeleted> toBeDeletedItems = new List<toBeDeleted>();

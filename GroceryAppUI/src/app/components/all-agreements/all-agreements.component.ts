@@ -48,8 +48,6 @@ export class AllAgreementsComponent implements OnInit {
         this.activeCartArray.push(activeArrayTmp);
         this.data.push(tmp);
       }
-      console.log(this.data);
-      console.log(this.activeCartArray);
     });
   }
   deleteProduct(cartItemId: any, cartId: any, id: any) {
@@ -65,6 +63,11 @@ export class AllAgreementsComponent implements OnInit {
           console.log(tmp.quantity);
           this.updateProduct(id, tmp).subscribe((res) => {
             console.log(res);
+            this.navigationService
+              .deleteReturnToBeDeletedProduct(cartItemId, cartId)
+              .subscribe((res) => {
+                console.log(res);
+              });
             this.refreshPage();
           });
         });
