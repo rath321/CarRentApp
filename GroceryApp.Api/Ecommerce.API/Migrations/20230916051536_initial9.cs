@@ -5,7 +5,7 @@
 namespace Ecommerce.API.Migrations
 {
     /// <inheritdoc />
-    public partial class initial2 : Migration
+    public partial class initial9 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -69,37 +69,6 @@ namespace Ecommerce.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ProductsModel",
-                columns: table => new
-                {
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductCategoryId = table.Column<int>(type: "int", nullable: false),
-                    OfferId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductsModel", x => x.ProductId);
-                    table.ForeignKey(
-                        name: "FK_ProductsModel_Offers_OfferId",
-                        column: x => x.OfferId,
-                        principalTable: "Offers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductsModel_ProductCategories_ProductCategoryId",
-                        column: x => x.ProductCategoryId,
-                        principalTable: "ProductCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Products_OfferId",
                 table: "Products",
@@ -109,16 +78,6 @@ namespace Ecommerce.API.Migrations
                 name: "IX_Products_ProductCategoryId",
                 table: "Products",
                 column: "ProductCategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductsModel_OfferId",
-                table: "ProductsModel",
-                column: "OfferId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductsModel_ProductCategoryId",
-                table: "ProductsModel",
-                column: "ProductCategoryId");
         }
 
         /// <inheritdoc />
@@ -126,9 +85,6 @@ namespace Ecommerce.API.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Products");
-
-            migrationBuilder.DropTable(
-                name: "ProductsModel");
 
             migrationBuilder.DropTable(
                 name: "Offers");

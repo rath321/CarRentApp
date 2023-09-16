@@ -21,7 +21,7 @@ export class UtilityService {
     let finalPrice: number = price - price * (discount / 100);
     return finalPrice;
   }
-  
+
   getUser(): User {
     let token = this.jwt.decodeToken();
     let user: User = {
@@ -95,7 +95,7 @@ export class UtilityService {
     let pricepaid = 0;
     for (let cartitem of cart.cartItems) {
       pricepaid += this.applyDiscount(
-        cartitem.product.price,
+        cartitem.product.price * cartitem.duration,
         cartitem.product.offer.discount
       );
     }

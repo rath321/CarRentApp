@@ -38,7 +38,49 @@ namespace Ecommerce.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Offer");
+                    b.ToTable("Offers");
+                });
+
+            modelBuilder.Entity("ECommerce.API.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ProductId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OfferId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("ProductCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OfferId");
+
+                    b.HasIndex("ProductCategoryId");
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("ECommerce.API.Models.ProductCategory", b =>
@@ -78,14 +120,8 @@ namespace Ecommerce.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OfferId")
-                        .HasColumnType("int");
-
                     b.Property<double>("Price")
                         .HasColumnType("float");
-
-                    b.Property<int>("ProductCategoryId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -96,14 +132,10 @@ namespace Ecommerce.API.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("OfferId");
-
-                    b.HasIndex("ProductCategoryId");
-
                     b.ToTable("ProductsModel");
                 });
 
-            modelBuilder.Entity("Ecommerce.API.Models.ProductModel", b =>
+            modelBuilder.Entity("ECommerce.API.Models.Product", b =>
                 {
                     b.HasOne("ECommerce.API.Models.Offer", "Offer")
                         .WithMany()

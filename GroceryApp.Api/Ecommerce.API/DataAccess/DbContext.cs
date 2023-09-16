@@ -8,16 +8,14 @@ namespace Ecommerce.API.DataAccess
     public class MyDbContext : DbContext
     {
         public DbSet<ProductModel> ProductsModel { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Offer> Offers { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
-
         // Your constructor with options
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
         }
 
-        public MyDbContext()
-        {
-        }
     }
 
 }

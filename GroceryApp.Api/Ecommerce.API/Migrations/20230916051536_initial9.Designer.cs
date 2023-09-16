@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.API.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230916041055_initial2")]
-    partial class initial2
+    [Migration("20230916051536_initial9")]
+    partial class initial9
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,14 +123,8 @@ namespace Ecommerce.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OfferId")
-                        .HasColumnType("int");
-
                     b.Property<double>("Price")
                         .HasColumnType("float");
-
-                    b.Property<int>("ProductCategoryId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -141,33 +135,10 @@ namespace Ecommerce.API.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("OfferId");
-
-                    b.HasIndex("ProductCategoryId");
-
                     b.ToTable("ProductsModel");
                 });
 
             modelBuilder.Entity("ECommerce.API.Models.Product", b =>
-                {
-                    b.HasOne("ECommerce.API.Models.Offer", "Offer")
-                        .WithMany()
-                        .HasForeignKey("OfferId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ECommerce.API.Models.ProductCategory", "ProductCategory")
-                        .WithMany()
-                        .HasForeignKey("ProductCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Offer");
-
-                    b.Navigation("ProductCategory");
-                });
-
-            modelBuilder.Entity("Ecommerce.API.Models.ProductModel", b =>
                 {
                     b.HasOne("ECommerce.API.Models.Offer", "Offer")
                         .WithMany()
