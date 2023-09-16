@@ -122,7 +122,7 @@ export class CartComponent implements OnInit {
     );
   }
   updateActiveCartOfUser(userId: number, updatedCartItems: any[]) {
-    const url = `https://localhost:7013/api/Shopping/UpdateActiveCartOfUser/${userId}`;
+    const url = `https://localhost:7255/api/Shopping/UpdateActiveCartOfUser/${userId}`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: '*/*',

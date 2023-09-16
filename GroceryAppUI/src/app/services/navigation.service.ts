@@ -13,7 +13,7 @@ import {
   providedIn: 'root',
 })
 export class NavigationService {
-  baseurl = 'https://localhost:7013/api/Shopping/';
+  baseurl = 'https://localhost:7255/api/Shopping/';
 
   constructor(private http: HttpClient) {}
 

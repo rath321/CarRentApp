@@ -11,7 +11,7 @@ import { UtilityService } from 'src/app/services/utility.service';
   styleUrls: ['./all-agreements.component.css'],
 })
 export class AllAgreementsComponent implements OnInit {
-  url = `https://localhost:7013/api/Shopping/GetAllUsers`;
+  url = `https://localhost:7255/api/Shopping/GetAllUsers`;
   constructor(
     private navigationService: NavigationService,
     public utilityService: UtilityService,
@@ -74,7 +74,7 @@ export class AllAgreementsComponent implements OnInit {
       });
   }
   updateProduct(id: number, product: Product) {
-    const url = `https://localhost:7013/api/Shopping/UpdateProduct/${id}`;
+    const url = `https://localhost:7255/api/Shopping/UpdateProduct/${id}`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       accept: '*/*',
@@ -99,7 +99,7 @@ export class AllAgreementsComponent implements OnInit {
     });
   }
   updateActiveCartOfUser(userId: number, updatedCartItems: any[]) {
-    const url = `https://localhost:7013/api/Shopping/UpdateActiveCartOfUser/${userId}`;
+    const url = `https://localhost:7255/api/Shopping/UpdateActiveCartOfUser/${userId}`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Accept: '*/*',

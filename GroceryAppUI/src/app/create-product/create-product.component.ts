@@ -139,7 +139,7 @@ export class CreateProductComponent implements OnInit {
         quantity: 0,
         imageName: 'string',
       };
-      const url = 'https://localhost:7013/api/Shopping/CreateProduct';
+      const url = 'https://localhost:7255/api/Shopping/CreateProduct';
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         accept: '*/*',
@@ -163,7 +163,7 @@ export class CreateProductComponent implements OnInit {
   }
 
   updateProduct(id: number) {
-    const url = `https://localhost:7013/api/Shopping/UpdateProduct/${id}`;
+    const url = `https://localhost:7255/api/Shopping/UpdateProduct/${id}`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       accept: '*/*',

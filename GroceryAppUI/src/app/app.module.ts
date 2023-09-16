@@ -70,7 +70,7 @@ import { AllAgreementsComponent } from './components/all-agreements/all-agreemen
         tokenGetter: () => {
           return localStorage.getItem('user');
         },
-        allowedDomains: ['localhost:7013'],
+        allowedDomains: ['localhost:7255'],
       },
     }),
   ],

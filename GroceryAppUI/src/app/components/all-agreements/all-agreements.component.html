@@ -90,7 +90,7 @@
       >
         <span class="time"
           >Rented On :
-          <span class="fs-5">{{ cart.orderedOn | date : "dd-MMM-YYYY" }}</span>
+          <span class="fs-5">{{ cart.orderedOn.substring(0, 16) }}</span>
         </span>
         <span class="cartId"
           >CartId :

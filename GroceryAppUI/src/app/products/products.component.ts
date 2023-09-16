@@ -117,7 +117,7 @@ export class ProductsComponent implements OnInit {
     });
   }
   deleteProduct(id: number) {
-    const url = `https://localhost:7013/api/Shopping/DeleteProduct/${id}`;
+    const url = `https://localhost:7255/api/Shopping/DeleteProduct/${id}`;
 
     this.http.delete(url).subscribe(
       () => {

@@ -50,7 +50,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   updateProduct(id: number) {
-    const url = `https://localhost:7013/api/Shopping/UpdateProduct/${id}`;
+    const url = `https://localhost:7255/api/Shopping/UpdateProduct/${id}`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       accept: '*/*',
