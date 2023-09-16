@@ -1,7 +1,10 @@
-﻿namespace ECommerce.API.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ECommerce.API.Models
 {
     public class Product
     {
+        [Column("ProductId")]
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
