@@ -12,12 +12,14 @@ CREATE TABLE [dbo].[CartItems](
 	[CartItemId] [int] IDENTITY(1,1) NOT NULL,
 	[CartId] [int] NOT NULL,
 	[ProductId] [int] NOT NULL,
+	[Duration] [int] NOT NULL,
  CONSTRAINT [PK_CartItems] PRIMARY KEY CLUSTERED 
 (
 	[CartItemId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 /****** Object:  Table [dbo].[Carts]    Script Date: 25-09-2022 17:30:58 ******/
 SET ANSI_NULLS ON
 GO
@@ -64,6 +66,18 @@ CREATE TABLE [dbo].[Orders](
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Orders]    Script Date: 25-09-2022 17:30:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE toBeDeletedItems (
+    cartId INT NOT NULL,
+    cartItemId INT NOT NULL,
+    PRIMARY KEY (cartId, cartItemId)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 /****** Object:  Table [dbo].[PaymentMethods]    Script Date: 25-09-2022 17:30:58 ******/

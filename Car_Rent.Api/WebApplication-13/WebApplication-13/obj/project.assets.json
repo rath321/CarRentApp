@@ -3320,11 +3320,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nikhilrathore\\Downloads\\GroceryApp\\Ecom.Api\\WebApplication-13\\WebApplication-13\\WebApplication-13.csproj",
+      "projectUniqueName": "C:\\Users\\nikhilrathore\\Downloads\\GroceryApp\\Car_Rent.Api\\WebApplication-13\\WebApplication-13\\WebApplication-13.csproj",
       "projectName": "WebApplication-13",
-      "projectPath": "C:\\Users\\nikhilrathore\\Downloads\\GroceryApp\\Ecom.Api\\WebApplication-13\\WebApplication-13\\WebApplication-13.csproj",
+      "projectPath": "C:\\Users\\nikhilrathore\\Downloads\\GroceryApp\\Car_Rent.Api\\WebApplication-13\\WebApplication-13\\WebApplication-13.csproj",
       "packagesPath": "C:\\Users\\nikhilrathore\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nikhilrathore\\Downloads\\GroceryApp\\Ecom.Api\\WebApplication-13\\WebApplication-13\\obj\\",
+      "outputPath": "C:\\Users\\nikhilrathore\\Downloads\\GroceryApp\\Car_Rent.Api\\WebApplication-13\\WebApplication-13\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

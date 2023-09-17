@@ -32,10 +32,10 @@
               <div class="col-8">
                 <div class="card-body">
                   <h5 class="card-title title">
-                    {{ cartItem.product.title }}
+                    {{ cartItem?.product?.title }}
                   </h5>
                   <h5 class="card-title text-success">
-                    {{ cartItem.product.price * cartItem.duration }}
+                    {{ cartItem?.product?.price * cartItem?.duration }}
                   </h5>
                 </div>
               </div>
@@ -85,22 +85,22 @@
 
     <div *ngFor="let cart of usersCart[3]">
       <div
-        *ngIf="cart.cartItems.length != 0"
+        *ngIf="cart?.cartItems?.length != 0"
         class="card-header d-flex fw-bold justify-content-between align-items-center"
       >
         <span class="time"
           >Rented On :
-          <span class="fs-5">{{ cart.orderedOn.substring(0, 16) }}</span>
+          <span class="fs-5">{{ cart?.orderedOn?.substring(0, 16) }}</span>
         </span>
         <span class="cartId"
           >CartId :
-          <span class="fs-5">{{ cart.id }}</span>
+          <span class="fs-5">{{ cart?.id }}</span>
         </span>
-        <span class="count">Items: {{ cart.cartItems.length }}</span>
+        <span class="count">Items: {{ cart?.cartItems?.length }}</span>
         <span class="price"
           >Price :
           <span class="fs-5">
-            {{ utilityService.calculatePricePaid(cart) }}
+            {{ utilityService.calculatePricePaid(cart.cartItems) }}
           </span>
         </span>
       </div>

@@ -74,7 +74,9 @@ export class UtilityService {
 
     sessionStorage.setItem('user', authToken);
     localStorage.setItem('authRole', authRole);
+    console.log(token);
     this.setUserDetails(token);
+    console.log(this.getUser());
     this.authToken = authToken;
     this.authRole = authRole;
   }
@@ -111,11 +113,18 @@ export class UtilityService {
   addToCart(product: Product, duration: number) {
     let productid = product.id;
     let userid = this.getUser().id;
-    this.navigationService
-      .addToCart(userid, productid, duration)
-      .subscribe((res: any) => {
-        if (res.toString() === 'inserted') this.changeCart.next(1);
-      });
+    console.log(userid);
+    this.navigationService.addToCart(userid, productid, duration).subscribe(
+      (res: any) => {
+        console.log(res);
+        if (res === 'inserted') this.changeCart.next(1);
+      },
+      (error) => {
+        // Handle error response here, e.g., display an error message
+        if (error.error.text === 'inserted') this.changeCart.next(1);
+        console.error('Error:', error);
+      }
+    );
   }
 
   calculatePayment(cart: Cart, payment: Payment) {
@@ -144,9 +153,14 @@ export class UtilityService {
     else payment.shipingCharges = 200;
   }
 
-  calculatePricePaid(cart: Cart) {
+  calculatePricePaid(cartItems: any[]) {
+    if (!Array.isArray(cartItems)) {
+      // Handle the case where cartItems is not an array
+      return 0; // Or handle it in another way based on your requirements
+    }
+
     let pricepaid = 0;
-    for (let cartitem of cart.cartItems) {
+    for (let cartitem of cartItems) {
       pricepaid += this.applyDiscount(
         cartitem.product.price * cartitem.duration,
         cartitem.product.offer.discount

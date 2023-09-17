@@ -178,7 +178,7 @@ export class NavigationService {
       productid +
       '/' +
       duration;
-    return this.http.post(url, null, { headers: headers });
+    return this.http.post(url, null);
   }
 
   getActiveCartOfUser(userid: number) {

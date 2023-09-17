@@ -44,7 +44,10 @@ export class CartComponent implements OnInit {
     private navigationService: NavigationService,
     private http: HttpClient,
     private router: Router
-  ) {}
+  ) {
+    this.usersCart.user = this.utilityService.getUser();
+    console.log(this.usersCart.user);
+  }
 
   ngOnInit(): void {
     // Get Cart
@@ -54,6 +57,7 @@ export class CartComponent implements OnInit {
       .getActiveCartOfUser(this.utilityService.getUser().id)
       .subscribe((res: any) => {
         this.usersCart = res;
+        this.usersCart.user = this.utilityService.getUser();
         let len = this.usersCart.cartItems.length;
         this.updateItems = this.usersCart.cartItems;
         // console.log(this.usersCart.cartItems[0]);
