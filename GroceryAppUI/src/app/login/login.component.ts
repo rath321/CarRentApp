@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
   private modalComponentRef: any;
   ngOnInit(): void {
     this.loginForm = this.fb.group({
+      UserName: ['', [Validators.required, Validators.maxLength(25)]],
       email: ['', [Validators.required, Validators.email]],
       pwd: [
         '',
@@ -44,17 +45,39 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    let token: { toString: () => string };
     this.navigationService
       .loginUser(this.Email.value, this.PWD.value)
-      .subscribe((res: any) => {
-        if (res.toString() !== 'invalid') {
-          this.message = 'Logged In Successfully.';
-          this.utilityService.setUser(res.toString());
-          this.router.navigate(['']);
-        } else {
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.navigationService
+            .loginUserEF(this.UserName.value, this.PWD.value)
+            .subscribe(
+              (response: any) => {
+                console.log(response.token);
+                if (response.token.toString() !== 'invalid') {
+                  this.message = 'Logged In Successfully.';
+                  this.utilityService.setUser(
+                    res,
+                    response.token.toString(),
+                    response.roles
+                  );
+
+                  this.router.navigate(['']);
+                } else {
+                  this.message = 'Invalid Credentials!';
+                }
+              },
+              (err) => {
+                this.message = 'Invalid Credentials!';
+              }
+            );
+        },
+        (err) => {
           this.message = 'Invalid Credentials!';
         }
-      });
+      );
   }
   closeModal() {
     if (this.modalComponentRef) {
@@ -67,5 +90,8 @@ export class LoginComponent implements OnInit {
   }
   get PWD(): FormControl {
     return this.loginForm.get('pwd') as FormControl;
+  }
+  get UserName(): FormControl {
+    return this.loginForm.get('UserName') as FormControl;
   }
 }

@@ -42,7 +42,7 @@ export class ProductsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.navigationService.getProductsAll().subscribe((data) => {
+    this.utilityService.getProductsAll().subscribe((data) => {
       this.filteredItems = data;
       this.products = data;
     });

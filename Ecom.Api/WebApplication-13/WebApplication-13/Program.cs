@@ -45,9 +45,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "your-issuer", // Replace with your issuer
-        ValidAudience = "your-audience", // Replace with your audience
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key")) // Replace with your secret key
+        ValidIssuer = "http://localhost:7255", // Replace with your issuer
+        ValidAudience = "http://localhost:5010", // Replace with your audience
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("JwtsldfLjlskdjflsLlLJeureurw3r0900lLJLLJLJofe8")) // Replace with your secret key
     };
 });
 
@@ -63,7 +63,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseCors("AllowSpecificOrigin");
 app.UseAuthorization();

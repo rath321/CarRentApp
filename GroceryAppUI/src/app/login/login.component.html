@@ -1,6 +1,30 @@
 <!-- Login Form -->
 <form [formGroup]="loginForm" (ngSubmit)="login()">
+  <div class="col">
+    <label for="UserName" class="form-label">UserName</label>
+    <input
+      type="text"
+      class="form-control"
+      id="UserName"
+      formControlName="UserName"
+    />
+
+    <!-- Errors -->
+    <div
+      class="form-text text-danger"
+      *ngIf="UserName.errors?.['required'] && (UserName.dirty || UserName.touched)"
+    >
+      UserName is Required
+    </div>
+    <div
+      class="form-text text-danger"
+      *ngIf="!!UserName.errors?.['minlength'] && (UserName.dirty || UserName.touched)"
+    >
+      UserName is too Short. At least 2 characters.
+    </div>
+  </div>
   <!-- Email -->
+
   <div class="mb-3">
     <label for="email" class="form-label">Email</label>
     <input

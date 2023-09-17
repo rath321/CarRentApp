@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs';
 import {
   Category,
@@ -14,8 +14,13 @@ import {
 })
 export class NavigationService {
   baseurl = 'https://localhost:7255/api/Shopping/';
-
-  constructor(private http: HttpClient) {}
+  authToken: any;
+  authRole: any;
+  constructor(private http: HttpClient) {
+    this.authToken = sessionStorage.getItem('authToken');
+    this.authRole = localStorage.getItem('authRole');
+    console.log(this.authToken);
+  }
 
   getCategoryList() {
     let url = this.baseurl + 'GetCategoryList';
@@ -32,17 +37,43 @@ export class NavigationService {
       )
     );
   }
+  getAuthorizedData(jwtToken: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwtToken}`,
+    });
 
+    return this.http.get<any>(this.baseurl + 'your-authorized-endpoint', {
+      headers,
+    });
+  }
   getProducts(category: string, subcategory: string, count: number) {
-    return this.http.get<any[]>(this.baseurl + 'GetProducts', {
+    console.log(this.authToken);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ` + this.authToken,
+    });
+    const options = {
+      headers: headers,
       params: new HttpParams()
         .set('category', category)
         .set('subcategory', subcategory)
         .set('count', count),
-    });
+    };
+    return this.http.get<any[]>(this.baseurl + 'GetProducts', options);
   }
   getProductsAll() {
-    return this.http.get<any[]>(this.baseurl + 'GetProductsAll');
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ` + this.authToken
+    );
+    console.log(this.authToken, headers);
+    return this.http.get<any[]>(this.baseurl + 'GetProductsAll', {
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Bearer ` + this.authToken
+      ),
+    });
   }
 
   getProduct(id: number) {
@@ -54,7 +85,29 @@ export class NavigationService {
     let url = this.baseurl + 'RegisterUser';
     return this.http.post(url, user, { responseType: 'text' });
   }
+  registerUserEF(
+    UserName: string,
+    password: string,
+    email: string,
+    role: string
+  ) {
+    let apiUrl = 'https://localhost:7255/api/Authentication';
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+    });
 
+    const body = {
+      username: UserName,
+      email: email,
+      password: password,
+    };
+
+    // Append the role query parameter
+    const url = `${apiUrl}/RegisterUser?role=${role}`;
+
+    return this.http.post(url, JSON.stringify(body), { headers: headers });
+  }
   loginUser(email: string, password: string) {
     let url = this.baseurl + 'LoginUser';
     return this.http.post(
@@ -62,6 +115,22 @@ export class NavigationService {
       { Email: email, Password: password },
       { responseType: 'text' }
     );
+  }
+  loginUserEF(UserName: string, password: string) {
+    let url = 'https://localhost:7255/api/Authentication/LoginUser';
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+    });
+
+    const body = {
+      username: UserName,
+      password: password,
+    };
+
+    return this.http.post(url, JSON.stringify(body), {
+      headers: headers,
+    });
   }
 
   submitReview(userid: number, productid: number, review: string) {

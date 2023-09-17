@@ -4,24 +4,36 @@ import { Subject, window } from 'rxjs';
 import { Cart, Payment, Product, ProductCart, User } from '../models/models';
 import { NavigationService } from './navigation.service';
 import { Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilityService {
   toBeDeleted: any = [];
+  baseurl = 'https://localhost:7255/api/Shopping/';
   changeCart = new Subject();
   constructor(
     private router: Router,
     private navigationService: NavigationService,
-    private jwt: JwtHelperService
-  ) {}
-
+    private jwt: JwtHelperService,
+    private http: HttpClient
+  ) {
+    this.authToken = this.getToken();
+  }
+  authToken: any;
+  authRole: any;
   applyDiscount(price: number, discount: number): number {
     let finalPrice: number = price - price * (discount / 100);
     return finalPrice;
   }
 
+  getToken() {
+    return sessionStorage.getItem('authToken');
+  }
+  getRole() {
+    return localStorage.getItem('authRole');
+  }
   getUser(): User {
     let token = this.jwt.decodeToken();
     let user: User = {
@@ -38,8 +50,14 @@ export class UtilityService {
     return user;
   }
 
-  setUser(token: string) {
+  setUser(token: string, authToken: any, authRole: any) {
+    console.log(authToken);
+
+    sessionStorage.setItem('authToken', authToken);
+    localStorage.setItem('authRole', authRole);
     localStorage.setItem('user', token);
+    this.authToken = authToken;
+    this.authRole = authRole;
   }
 
   isLoggedIn() {
@@ -47,14 +65,29 @@ export class UtilityService {
   }
   isAdmin() {
     let user = this.getUser().firstName.slice(0, 6);
-    if (user === 'admin-') return true;
+    this.authRole = localStorage.getItem('authRole');
+    if (user === 'admin-' && this.authRole === 'Admin') return true;
     return false;
   }
   logoutUser() {
     localStorage.removeItem('user');
+    sessionStorage.removeItem('authToken');
+    localStorage.removeItem('authRole');
     this.router.navigate(['']);
   }
-
+  getProductsAll() {
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ` + this.authToken
+    );
+    console.log(this.authToken, headers);
+    return this.http.get<any[]>(this.baseurl + 'GetProductsAll', {
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Bearer ` + this.authToken
+      ),
+    });
+  }
   addToCart(product: Product, duration: number) {
     let productid = product.id;
     let userid = this.getUser().id;

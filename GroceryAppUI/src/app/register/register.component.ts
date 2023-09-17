@@ -28,6 +28,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
+      UserName: ['', [Validators.required, Validators.maxLength(25)]],
       firstName: [
         '',
         [
@@ -71,9 +72,12 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
+    let role = 'User';
     var UserFirstName = this.FirstName.value;
-    if (this.isAdmin.value === 'admin')
+    if (this.isAdmin.value === 'admin') {
       UserFirstName = 'admin-' + this.FirstName.value;
+      role = 'Admin';
+    }
     let user: User = {
       id: 0,
       firstName: UserFirstName,
@@ -87,6 +91,14 @@ export class RegisterComponent implements OnInit {
     };
 
     this.navigationService.registerUser(user).subscribe((res: any) => {
+      this.navigationService
+        .registerUserEF(
+          this.UserName.value,
+          this.PWD.value,
+          this.Email.value,
+          role
+        )
+        .subscribe((res) => {});
       this.message = res.toString();
     });
   }
@@ -115,6 +127,9 @@ export class RegisterComponent implements OnInit {
   }
   get RPWD(): FormControl {
     return this.registerForm.get('rpwd') as FormControl;
+  }
+  get UserName(): FormControl {
+    return this.registerForm.get('UserName') as FormControl;
   }
   //#endregion
 }

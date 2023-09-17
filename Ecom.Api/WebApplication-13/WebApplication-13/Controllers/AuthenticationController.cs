@@ -95,26 +95,31 @@ namespace WebApplication_13.Controllers
                 var userRoles = await _userManager.GetRolesAsync(user);
                 foreach (var role in userRoles)
                 {
+                    
                     authClaims.Add(new Claim(ClaimTypes.Role, role));
                 }
                 var jwtToken = GetToken(authClaims);
+                Console.WriteLine(jwtToken.ToString());
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
-                    expiration = jwtToken.ValidTo
+                    expiration = jwtToken.ValidTo,
+                    roles = userRoles[0]
+
                 });
         }
             return Unauthorized();
         }
         private JwtSecurityToken GetToken(List<Claim> authClaims)
         {
-            var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("JwtsldfLjlskdjflsLlLJeureurw3r0900lLJLLJLJofe8"));
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
                 expires:DateTime.Now.AddHours(3),
                 claims:authClaims,
                 signingCredentials:new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256));
+            Console.WriteLine(token.ToString());
             return token;
         }
     }
