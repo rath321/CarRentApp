@@ -19,6 +19,7 @@ namespace ECommerce.API.Controllers
             this.dataAccess = dataAccess;
             DateFormat = configuration["Constants:DateFormat"];
         }
+        [Authorize]
         [HttpGet("GetCategoryList")]
         public IActionResult GetCategoryList()
         {
@@ -32,7 +33,6 @@ namespace ECommerce.API.Controllers
             var result = dataAccess.GetProducts(category, subcategory, count);
             return Ok(result);
         }
-        [Authorize]
         [HttpGet("GetProductsAll")]
         public IActionResult GetProductsAll()
         {

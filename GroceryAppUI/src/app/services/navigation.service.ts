@@ -24,7 +24,12 @@ export class NavigationService {
 
   getCategoryList() {
     let url = this.baseurl + 'GetCategoryList';
-    return this.http.get<any[]>(url).pipe(
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ` + this.authToken
+    );
+    console.log(headers);
+    return this.http.get<any[]>(url, { headers: headers }).pipe(
       map((categories: any) =>
         categories.map((category: any) => {
           let mappedCategory: Category = {
@@ -67,7 +72,6 @@ export class NavigationService {
       'Authorization',
       `Bearer ` + this.authToken
     );
-    console.log(this.authToken, headers);
     return this.http.get<any[]>(this.baseurl + 'GetProductsAll', {
       headers: new HttpHeaders().set(
         'Authorization',
@@ -113,6 +117,7 @@ export class NavigationService {
     return this.http.post(
       url,
       { Email: email, Password: password },
+
       { responseType: 'text' }
     );
   }

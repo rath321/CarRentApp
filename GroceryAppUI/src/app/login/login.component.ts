@@ -10,6 +10,8 @@ import { UtilityService } from '../services/utility.service';
 import { Router } from '@angular/router';
 import { ModalService } from '../services/modal.service';
 import { HeaderComponent } from '../header/header.component';
+import { User } from '../models/models';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-login',
@@ -45,12 +47,13 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    let token: { toString: () => string };
+    let tmp: any;
     this.navigationService
       .loginUser(this.Email.value, this.PWD.value)
       .subscribe(
         (res: any) => {
           console.log(res);
+
           this.navigationService
             .loginUserEF(this.UserName.value, this.PWD.value)
             .subscribe(
