@@ -91,7 +91,7 @@ export class CartComponent implements OnInit {
   }
 
   onUpdate() {
-    console.log(this.updateItems);
+    // console.log(this.updateItems);
     this.updateActiveCartOfUser(
       this.usersCart.user.id,
       this.updateItems
@@ -101,7 +101,7 @@ export class CartComponent implements OnInit {
           .getActiveCartOfUser(this.utilityService.getUser().id)
           .subscribe((res: any) => {
             this.usersCart = res;
-            console.log(this.usersCart);
+            // console.log(this.usersCart);
             let len = this.usersCart.cartItems.length;
             this.updateItems = this.usersCart.cartItems;
 

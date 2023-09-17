@@ -49,8 +49,6 @@ namespace WebApplication_13.Business
         [HttpPost("CreateProduct")]
         public IActionResult CreateProduct(Product product)
         {
-            // Perform validation and error handling if needed
-            // Assuming the Product object is passed in the request body
 
             var createdProduct = dataAccess.CreateProduct(product);
 
@@ -60,8 +58,6 @@ namespace WebApplication_13.Business
         [HttpPost("ToBeDeleted/{cartItemId}/{cartId}")]
         public IActionResult ToBeDeleted(int cartItemId, int cartId)
         {
-            // Perform validation and error handling if needed
-            // Assuming the Product object is passed in the request body
 
             dataAccess.InsertToBeDeletedItem(cartId, cartItemId);
 
@@ -72,48 +68,36 @@ namespace WebApplication_13.Business
         [HttpGet("ToBeDeleted")]
         public IActionResult ToBeDeletedGet(int cartItemId, int cartId)
         {
-            // Perform validation and error handling if needed
-            // Assuming the Product object is passed in the request body
-
             List<toBeDeleted> tmp = dataAccess.GetAllToBeDeletedItems();
 
-            // Return the created product
             return Ok(tmp);
         }
         //[Authorize(Roles = "Admin")]
         [HttpDelete("DeleteToBeDeleted/{cartItemId}/{cartId}")]
         public IActionResult DeleteToBeDeleted(int cartItemId, int cartId)
         {
-            // Perform validation and error handling if needed
-            // Assuming the Product object is passed in the request body
+           
 
             dataAccess.DeleteToBeDeletedItem(cartId, cartItemId);
 
-            // Return the created product
+         
             return Ok();
         }
         //[Authorize(Roles = "Admin")]
         [HttpGet("GetAllUsers")]
         public IActionResult GetAllUsers()
         {
-            // Perform validation and error handling if needed
-            // Assuming the Product object is passed in the request body
-
+         
             List<User> tmp = dataAccess.GetAllUsers();
 
-            // Return the created product
             return Ok(tmp);
         }
         //[Authorize(Roles = "Admin")]
         [HttpPut("UpdateProduct/{id}")]
         public IActionResult UpdateProduct(int id, Product product)
         {
-            // Perform validation and error handling if needed
-            // Assuming the Product object is passed in the request body
-
             var updatedProduct = dataAccess.UpdateProduct(id, product);
 
-            // Return the updated product
             return Ok(updatedProduct);
         }
         //[Authorize(Roles = "Admin")]
@@ -122,7 +106,6 @@ namespace WebApplication_13.Business
         {
             dataAccess.DeleteProduct(id);
 
-            // Return a success response
             return Ok();
         }
         [HttpDelete("DeleteCartItem/{cartItemId}/{cartId}/")]
@@ -130,7 +113,6 @@ namespace WebApplication_13.Business
         {
             dataAccess.DeleteCartItem(cartId, cartItemId);
 
-            // Return a success response
             return Ok();
         }
         //[Authorize(Roles = "Admin")]

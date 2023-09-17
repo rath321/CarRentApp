@@ -157,11 +157,11 @@ export class OrderComponent implements OnInit {
       amountPaid: 0,
       createdAt: 'string',
     };
-    console.log(
-      this.usersPaymentInfo.totalAmount,
-      this.usersPaymentInfo.shipingCharges,
-      this.usersPaymentInfo.amountReduced
-    );
+    // console.log(
+    //   this.usersPaymentInfo.totalAmount,
+    //   this.usersPaymentInfo.shipingCharges,
+    //   this.usersPaymentInfo.amountReduced
+    // );
     payment = {
       id: 0,
       paymentMethod: {
@@ -178,7 +178,7 @@ export class OrderComponent implements OnInit {
       amountPaid: this.usersPaymentInfo.amountPaid,
       createdAt: '',
     };
-    console.log(payment);
+    // console.log(payment);
     this.navigationService.insertPayment(payment).subscribe(
       (paymentResponse: any) => {
         payment.id = parseInt(paymentResponse);

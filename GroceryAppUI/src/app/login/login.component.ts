@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
       .subscribe(
         (res: string) => {
           const token: any = jwt_decode(res);
-          console.log(token);
+          // console.log(token);
           let user: User = {
             id: token?.id,
             firstName: token?.firstName,
@@ -68,12 +68,12 @@ export class LoginComponent implements OnInit {
             createdAt: token?.createdAt,
             modifiedAt: token?.modifiedAt,
           };
-          console.log(user);
+          // console.log(user);
           this.navigationService
             .loginUserEF(this.UserName.value, this.PWD.value)
             .subscribe(
               (response: any) => {
-                console.log(response.token);
+                // console.log(response.token);
                 if (response.token.toString() !== 'invalid') {
                   this.message = 'Logged In Successfully.';
                   this.utilityService.setUser(

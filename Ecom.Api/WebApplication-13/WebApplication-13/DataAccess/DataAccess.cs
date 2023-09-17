@@ -37,110 +37,55 @@ namespace ECommerce.API.DataAccess
                 };
                 connection.Open();
 
-                string query = "SELECT COUNT(*) FROM Carts WHERE UserId=" + userid + " AND Ordered='false';";
-                command.CommandText = query;
-
-                int count = (int)command.ExecuteScalar();
-                if (count == 0)
+                try
                 {
-                    return cart;
-                }
+                    string query = "SELECT COUNT(*) FROM Carts WHERE UserId=" + userid + " AND Ordered='false';";
+                    command.CommandText = query;
 
-                query = "SELECT CartId From Carts WHERE UserId=" + userid + " AND Ordered='false';";
-                command.CommandText = query;
-
-                int cartid = (int)command.ExecuteScalar();
-
-                query = "select * from CartItems where CartId=" + cartid + ";";
-                command.CommandText = query;
-
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    CartItem item = new CartItem()
+                    int count = (int)command.ExecuteScalar();
+                    if (count == 0)
                     {
-                        Id = (int)reader["CartItemId"],
-                        Product = GetProduct((int)reader["ProductId"]),
-                        Duration = reader["Duration"] == DBNull.Value ? 0 : (int)reader["Duration"]
-                    };
-                    cart.CartItems.Add(item);
-                }
+                        return cart;
+                    }
 
-                cart.Id = cartid;
-                cart.User = GetUser(userid);
-                cart.Ordered = false;
-                cart.OrderedOn = "";
+                    query = "SELECT CartId From Carts WHERE UserId=" + userid + " AND Ordered='false';";
+                    command.CommandText = query;
+
+                    int cartid = (int)command.ExecuteScalar();
+
+                    query = "select * from CartItems where CartId=" + cartid + ";";
+                    command.CommandText = query;
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        CartItem item = new CartItem()
+                        {
+                            Id = (int)reader["CartItemId"],
+                            Product = GetProduct((int)reader["ProductId"]),
+                            Duration = reader["Duration"] == DBNull.Value ? 0 : (int)reader["Duration"]
+                        };
+                        cart.CartItems.Add(item);
+                    }
+
+                    cart.Id = cartid;
+                    cart.User = GetUser(userid);
+                    cart.Ordered = false;
+                    cart.OrderedOn = "";
+                }
+                catch (Exception ex)
+                {
+                    // Handle the exception here, e.g., log it or throw a custom exception.
+                    // You can also return a default cart or null if an error occurs.
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                    return null;
+                }
             }
             return cart;
         }
 
 
-        //public void UpdateActiveCartOfUser(int userId, List<CartItem> updatedCartItems)
-        //{
-        //    using (SqlConnection connection = new SqlConnection(dbconnection))
-        //    {
-        //        connection.Open();
 
-        //        using (SqlTransaction transaction = connection.BeginTransaction())
-        //        {
-        //            try
-        //            {
-        //                // Step 1: Get the active cart ID for the user
-        //                int activeCartId = GetActiveCartIdForUser(userId, connection, transaction);
-
-        //                // Step 2: Clear existing cart items for the active cart
-        //                ClearCartItems(activeCartId, connection, transaction);
-
-        //                // Step 3: Add the updated cart items to the active cart
-        //                AddCartItems(activeCartId, updatedCartItems, connection, transaction);
-
-        //                // Commit the transaction
-        //                transaction.Commit();
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                // Handle any exception and rollback the transaction if necessary
-        //                transaction.Rollback();
-        //                throw ex;
-        //            }
-        //        }
-        //    }
-        //}
-
-        //public int GetActiveCartIdForUser(int userId, SqlConnection connection, SqlTransaction transaction)
-        //{
-        //    string query = "SELECT CartId FROM Carts WHERE UserId = @UserId AND Ordered = 'false';";
-        //    SqlCommand command = new SqlCommand(query, connection, transaction);
-        //    command.Parameters.AddWithValue("@UserId", userId);
-
-        //    int cartId = (int)command.ExecuteScalar();
-
-        //    return cartId;
-        //}
-
-        //public void ClearCartItems(int cartId, SqlConnection connection, SqlTransaction transaction)
-        //{
-        //    string query = "DELETE FROM CartItems WHERE CartId = @CartId;";
-        //    SqlCommand command = new SqlCommand(query, connection, transaction);
-        //    command.Parameters.AddWithValue("@CartId", cartId);
-
-        //    command.ExecuteNonQuery();
-        //}
-
-        //public void AddCartItems(int cartId, List<CartItem> cartItems, SqlConnection connection, SqlTransaction transaction)
-        //{
-        //    string query = "INSERT INTO CartItems (CartId, ProductId) VALUES (@CartId, @ProductId);";
-        //    SqlCommand command = new SqlCommand(query, connection, transaction);
-
-        //    foreach (CartItem cartItem in cartItems)
-        //    {
-        //        command.Parameters.Clear();
-        //        command.Parameters.AddWithValue("@CartId", cartId);
-        //        command.Parameters.AddWithValue("@ProductId", cartItem.Product.Id);
-
-        //        command.ExecuteNonQuery();
-        //    }
-        //}
         public void UpdateActiveCartOfUser(int userId, List<CartItem> updatedCartItems)
         {
             using (SqlConnection connection = new SqlConnection(dbconnection))
@@ -777,12 +722,7 @@ namespace ECommerce.API.DataAccess
                 //}
                 query += " * FROM Products";
 
-                //if (!string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(subcategory))
-                //{
-                //    query += " WHERE CategoryId=(SELECT CategoryId FROM ProductCategories WHERE Category=@c AND SubCategory=@s)";
-                //    command.Parameters.Add("@c", System.Data.SqlDbType.NVarChar).Value = category;
-                //    command.Parameters.Add("@s", System.Data.SqlDbType.NVarChar).Value = subcategory;
-                //}
+              
 
                 query += " ORDER BY newid();";
                 command.CommandText = query;
@@ -800,12 +740,6 @@ namespace ECommerce.API.DataAccess
                         Quantity = (int)reader["Quantity"],
                         ImageName = (string)reader["ImageName"]
                     };
-
-                    //var categoryid = (int)reader["CategoryId"];
-                    //product.ProductCategory = GetProductCategory(categoryid);
-
-                    //var offerid = (int)reader["OfferId"];
-                    //product.Offer = GetOffer(offerid);
 
                     products.Add(product);
                 }

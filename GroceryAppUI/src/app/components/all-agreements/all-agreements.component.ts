@@ -57,12 +57,12 @@ export class AllAgreementsComponent implements OnInit {
       .subscribe((res) => {
         this.navigationService.getProduct(id).subscribe((res: any) => {
           tmp = res;
-          console.log(res);
-          console.log(res.quantity);
+          // console.log(res);
+          // console.log(res.quantity);
           tmp.quantity += 1;
-          console.log(tmp.quantity);
+          // console.log(tmp.quantity);
           this.updateProduct(id, tmp).subscribe((res) => {
-            console.log(res);
+            // console.log(res);
             this.navigationService
               .deleteReturnToBeDeletedProduct(cartItemId, cartId)
               .subscribe((res) => {
