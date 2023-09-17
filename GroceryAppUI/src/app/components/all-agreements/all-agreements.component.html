@@ -21,12 +21,12 @@
                 class="col-4 overflow-hidden d-flex justify-content-center align-items-center"
               >
                 <img
-                  src="{{ cartItem.product.imageName }}"
+                  src="{{ cartItem?.product?.imageName }}"
                   style="width: 60px; height: 60px"
                   class="img-fluid rounded-start"
                   alt="Product Image"
                   OpenProductDetails
-                  [productId]="cartItem.product.id"
+                  [productId]="cartItem?.product?.id"
                 />
               </div>
               <div class="col-8">
@@ -58,7 +58,7 @@
             class="fa fa-minus"
             style="cursor: pointer"
             *ngIf="activeCartArray[i][j]?.quantity !== 0"
-            (click)="onMinus(i, j, cartItem.product.id)"
+            (click)="onMinus(i, j, cartItem?.product?.id)"
           ></i>
         </div>
         days

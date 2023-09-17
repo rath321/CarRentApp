@@ -33,7 +33,7 @@ export class AllAgreementsComponent implements OnInit {
           .getActiveCartOfUser(res[i].id)
           .subscribe((data: any) => {
             tmp.push(data.cartItems);
-            for (var j = 0; j < data.cartItems.length; j++) {
+            for (var j = 0; j < data?.cartItems?.length; j++) {
               activeArrayTmp.push({
                 quantity: data.cartItems[j].duration,
                 id: data.cartItems[j].product.id,
