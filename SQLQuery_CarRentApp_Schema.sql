@@ -77,9 +77,7 @@ CREATE TABLE toBeDeletedItems (
     cartId INT NOT NULL,
     cartItemId INT NOT NULL,
     PRIMARY KEY (cartId, cartItemId)
-WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
+);
 /****** Object:  Table [dbo].[PaymentMethods]    Script Date: 25-09-2022 17:30:58 ******/
 SET ANSI_NULLS ON
 GO
