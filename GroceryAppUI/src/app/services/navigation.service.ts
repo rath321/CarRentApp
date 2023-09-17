@@ -17,18 +17,18 @@ export class NavigationService {
   authToken: any;
   authRole: any;
   constructor(private http: HttpClient) {
-    this.authToken = sessionStorage.getItem('authToken');
+    this.authToken = sessionStorage.getItem('user');
     this.authRole = localStorage.getItem('authRole');
-    console.log(this.authToken);
+    // console.log(this.authToken);
   }
 
-  getCategoryList() {
+  getCategoryList(): any {
     let url = this.baseurl + 'GetCategoryList';
     const headers = new HttpHeaders().set(
       'Authorization',
-      `Bearer ` + this.authToken
+      `Bearer ${this.authToken}`
     );
-    console.log(headers);
+    // console.log(headers, this.authToken);
     return this.http.get<any[]>(url, { headers: headers }).pipe(
       map((categories: any) =>
         categories.map((category: any) => {
@@ -42,16 +42,7 @@ export class NavigationService {
       )
     );
   }
-  getAuthorizedData(jwtToken: string) {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${jwtToken}`,
-    });
 
-    return this.http.get<any>(this.baseurl + 'your-authorized-endpoint', {
-      headers,
-    });
-  }
   getProducts(category: string, subcategory: string, count: number) {
     console.log(this.authToken);
     const headers = new HttpHeaders({
@@ -81,8 +72,13 @@ export class NavigationService {
   }
 
   getProduct(id: number) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let url = this.baseurl + 'GetProduct/' + id;
-    return this.http.get(url);
+    return this.http.get(url, { headers: headers });
   }
 
   registerUser(user: User) {
@@ -139,6 +135,11 @@ export class NavigationService {
   }
 
   submitReview(userid: number, productid: number, review: string) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let obj: any = {
       User: {
         Id: userid,
@@ -150,15 +151,25 @@ export class NavigationService {
     };
 
     let url = this.baseurl + 'InsertReview';
-    return this.http.post(url, obj, { responseType: 'text' });
+    return this.http.post(url, obj, { headers: headers });
   }
 
   getAllReviewsOfProduct(productId: number) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let url = this.baseurl + 'GetProductReviews/' + productId;
-    return this.http.get(url);
+    return this.http.get(url, { headers: headers });
   }
 
   addToCart(userid: number, productid: number, duration: number) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let url =
       this.baseurl +
       'InsertCartItem/' +
@@ -167,18 +178,33 @@ export class NavigationService {
       productid +
       '/' +
       duration;
-    return this.http.post(url, null, { responseType: 'text' });
+    return this.http.post(url, null, { headers: headers });
   }
 
   getActiveCartOfUser(userid: number) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let url = this.baseurl + 'GetActiveCartOfUser/' + userid;
-    return this.http.get(url);
+    return this.http.get(url, { headers: headers });
   }
   updateActiveCartOfUser(userid: number) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let url = this.baseurl + 'UpdateActiveCartOfUser/' + userid;
     // return this.http.post(url);
   }
   returnProductAddition(itemKeys: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let url =
       this.baseurl +
       'ToBeDeleted/' +
@@ -188,35 +214,71 @@ export class NavigationService {
     return this.http.post(url, null);
   }
   returnToBeDeletedProduct() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let url = this.baseurl + 'ToBeDeleted/';
-    return this.http.get(url);
+    return this.http.get(url, { headers: headers });
   }
   deleteReturnToBeDeletedProduct(cartItemId: any, cartId: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let url = this.baseurl + 'DeleteToBeDeleted/' + cartItemId + '/' + cartId;
-    return this.http.delete(url);
+    return this.http.delete(url, { headers: headers });
   }
   // JWT Helper Service : npm install @auth0/angular-jwt
   returnProductDeletion(cartItemId: any, cartId: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let url = this.baseurl + 'DeleteCartItem/' + cartItemId + '/' + cartId;
-    return this.http.delete(url);
+    return this.http.delete(url, { headers: headers });
   }
   getAllPreviousCarts(userid: number) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let url = this.baseurl + 'GetAllPreviousCartsOfUser/' + userid;
-    return this.http.get(url);
+    return this.http.get(url, { headers: headers });
   }
 
   getPaymentMethods() {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     let url = this.baseurl + 'GetPaymentMethods';
-    return this.http.get<PaymentMethod[]>(url);
+    return this.http.get<PaymentMethod[]>(url, { headers: headers });
   }
 
   insertPayment(payment: Payment) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     return this.http.post(this.baseurl + 'InsertPayment', payment, {
       responseType: 'text',
+      headers: headers,
     });
   }
 
   insertOrder(order: Order) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
     return this.http.post(this.baseurl + 'InsertOrder', order);
   }
 }

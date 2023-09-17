@@ -5,6 +5,8 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import jwt_decode from 'jwt-decode';
+
 import { NavigationService } from '../services/navigation.service';
 import { UtilityService } from '../services/utility.service';
 import { Router } from '@angular/router';
@@ -28,7 +30,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private navigationService: NavigationService,
     private utilityService: UtilityService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private jwt: JwtHelperService
   ) {}
   private modalComponentRef: any;
   ngOnInit(): void {
@@ -51,9 +54,21 @@ export class LoginComponent implements OnInit {
     this.navigationService
       .loginUser(this.Email.value, this.PWD.value)
       .subscribe(
-        (res: any) => {
-          console.log(res);
-
+        (res: string) => {
+          const token: any = jwt_decode(res);
+          console.log(token);
+          let user: User = {
+            id: token?.id,
+            firstName: token?.firstName,
+            lastName: token?.lastName,
+            address: token?.address,
+            mobile: token?.mobile,
+            email: token?.email,
+            password: '',
+            createdAt: token?.createdAt,
+            modifiedAt: token?.modifiedAt,
+          };
+          console.log(user);
           this.navigationService
             .loginUserEF(this.UserName.value, this.PWD.value)
             .subscribe(
@@ -62,7 +77,7 @@ export class LoginComponent implements OnInit {
                 if (response.token.toString() !== 'invalid') {
                   this.message = 'Logged In Successfully.';
                   this.utilityService.setUser(
-                    res,
+                    user,
                     response.token.toString(),
                     response.roles
                   );

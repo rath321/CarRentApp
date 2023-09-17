@@ -19,7 +19,7 @@ namespace ECommerce.API.Controllers
             this.dataAccess = dataAccess;
             DateFormat = configuration["Constants:DateFormat"];
         }
-        [Authorize]
+       
         [HttpGet("GetCategoryList")]
         public IActionResult GetCategoryList()
         {
@@ -45,6 +45,7 @@ namespace ECommerce.API.Controllers
             var result = dataAccess.GetProduct(id);
             return Ok(result);
         }
+        [Authorize(Roles="Admin")]
         [HttpPost("CreateProduct")]
         public IActionResult CreateProduct(Product product)
         {

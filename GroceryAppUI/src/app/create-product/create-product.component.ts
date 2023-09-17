@@ -139,10 +139,12 @@ export class CreateProductComponent implements OnInit {
         quantity: 0,
         imageName: 'string',
       };
+      let authToken = sessionStorage.getItem('user');
       const url = 'https://localhost:7255/api/Shopping/CreateProduct';
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         accept: '*/*',
+        Authorization: `Bearer ${authToken}`,
       });
 
       this.http.post(url, productData, { headers }).subscribe(
@@ -163,10 +165,12 @@ export class CreateProductComponent implements OnInit {
   }
 
   updateProduct(id: number) {
+    let authToken = sessionStorage.getItem('user');
     const url = `https://localhost:7255/api/Shopping/UpdateProduct/${id}`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       accept: '*/*',
+      Authorization: `Bearer ${authToken}`,
     });
 
     const requestBody = {

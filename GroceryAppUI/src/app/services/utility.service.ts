@@ -22,6 +22,7 @@ export class UtilityService {
     this.authToken = this.getToken();
   }
   authToken: any;
+  myUser: any;
   authRole: any;
   applyDiscount(price: number, discount: number): number {
     let finalPrice: number = price - price * (discount / 100);
@@ -29,39 +30,57 @@ export class UtilityService {
   }
 
   getToken() {
-    return sessionStorage.getItem('authToken');
+    return sessionStorage.getItem('user');
   }
   getRole() {
     return localStorage.getItem('authRole');
   }
-  getUser(): User {
-    let token = this.jwt.decodeToken();
+  setUserDetails(user: any) {
+    localStorage.setItem('id', user.id);
+    localStorage.setItem('firstName', user.firstName);
+    localStorage.setItem('lastName', user.lastName);
+    localStorage.setItem('address', user.address);
+    localStorage.setItem('mobile', user.mobile);
+    localStorage.setItem('email', user.email);
+    localStorage.setItem('createdAt', user.createdAt);
+    localStorage.setItem('modifiedAt', user.modifiedAt);
+  }
+  getUser(): any {
+    let id: any = localStorage.getItem('id');
+    let firstName: any = localStorage.getItem('firstName');
+    let lastName: any = localStorage.getItem('lastName');
+    let address: any = localStorage.getItem('address');
+    let mobile: any = localStorage.getItem('mobile');
+    let email: any = localStorage.getItem('email');
+    let createdAt: any = localStorage.getItem('createdAt');
+    let modifiedAt: any = localStorage.getItem('modifiedAt');
+
     let user: User = {
-      id: token?.id,
-      firstName: token?.firstName,
-      lastName: token?.lastName,
-      address: token?.address,
-      mobile: token?.mobile,
-      email: token?.email,
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      address: address,
+      mobile: mobile,
+      email: email,
       password: '',
-      createdAt: token?.createdAt,
-      modifiedAt: token?.modifiedAt,
+      createdAt: createdAt,
+      modifiedAt: modifiedAt,
     };
     return user;
   }
 
-  setUser(token: string, authToken: any, authRole: any) {
+  setUser(token: User, authToken: any, authRole: any) {
     console.log(authToken);
 
-    sessionStorage.setItem('authToken', authToken);
+    sessionStorage.setItem('user', authToken);
     localStorage.setItem('authRole', authRole);
-    localStorage.setItem('user', token);
+    this.setUserDetails(token);
     this.authToken = authToken;
     this.authRole = authRole;
   }
 
   isLoggedIn() {
-    return localStorage.getItem('user') ? true : false;
+    return sessionStorage.getItem('user') ? true : false;
   }
   isAdmin() {
     let user = this.getUser().firstName.slice(0, 6);
@@ -70,9 +89,10 @@ export class UtilityService {
     return false;
   }
   logoutUser() {
-    localStorage.removeItem('user');
-    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('user');
     localStorage.removeItem('authRole');
+    localStorage.clear();
+    sessionStorage.clear();
     this.router.navigate(['']);
   }
   getProductsAll() {
@@ -80,7 +100,7 @@ export class UtilityService {
       'Authorization',
       `Bearer ` + this.authToken
     );
-    console.log(this.authToken, headers);
+    // console.log(this.authToken, headers);
     return this.http.get<any[]>(this.baseurl + 'GetProductsAll', {
       headers: new HttpHeaders().set(
         'Authorization',
