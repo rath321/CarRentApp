@@ -9,6 +9,7 @@ using WebApplication_13.Models;
 
 namespace Ecommerce.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EntityFrameworkController : ControllerBase
@@ -18,6 +19,7 @@ namespace Ecommerce.API.Controllers
         {
             _dbContext = dbContext;
         }
+        [Authorize(Roles ="Admin")]
         [HttpPost("CreateProduct")]
         public IActionResult CreateProduct(Product product)
         {
@@ -45,7 +47,7 @@ namespace Ecommerce.API.Controllers
                 return BadRequest(errorMessage);
             }
         }
-
+        [Authorize(Roles ="Admin")]
 
         [HttpPut("UpdateProduct/{id}")]
         public IActionResult UpdateProduct(int id, [FromBody] Product updatedProduct)

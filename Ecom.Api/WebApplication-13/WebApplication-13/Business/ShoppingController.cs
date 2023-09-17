@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerce.API.Controllers
+namespace WebApplication_13.Business
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class ShoppingController : ControllerBase
@@ -19,14 +19,14 @@ namespace ECommerce.API.Controllers
             this.dataAccess = dataAccess;
             DateFormat = configuration["Constants:DateFormat"];
         }
-       
+
         [HttpGet("GetCategoryList")]
         public IActionResult GetCategoryList()
         {
             var result = dataAccess.GetProductCategories();
             return Ok(result);
         }
-        
+
         [HttpGet("GetProducts")]
         public IActionResult GetProducts(string category, string subcategory, int count)
         {
@@ -45,7 +45,7 @@ namespace ECommerce.API.Controllers
             var result = dataAccess.GetProduct(id);
             return Ok(result);
         }
-        [Authorize(Roles="Admin")]
+        //[Authorize(Roles="Admin")]
         [HttpPost("CreateProduct")]
         public IActionResult CreateProduct(Product product)
         {
@@ -68,6 +68,7 @@ namespace ECommerce.API.Controllers
             // Return the created product
             return Ok();
         }
+        //[Authorize(Roles = "Admin")]
         [HttpGet("ToBeDeleted")]
         public IActionResult ToBeDeletedGet(int cartItemId, int cartId)
         {
@@ -79,6 +80,7 @@ namespace ECommerce.API.Controllers
             // Return the created product
             return Ok(tmp);
         }
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("DeleteToBeDeleted/{cartItemId}/{cartId}")]
         public IActionResult DeleteToBeDeleted(int cartItemId, int cartId)
         {
@@ -90,6 +92,7 @@ namespace ECommerce.API.Controllers
             // Return the created product
             return Ok();
         }
+        //[Authorize(Roles = "Admin")]
         [HttpGet("GetAllUsers")]
         public IActionResult GetAllUsers()
         {
@@ -101,6 +104,7 @@ namespace ECommerce.API.Controllers
             // Return the created product
             return Ok(tmp);
         }
+        //[Authorize(Roles = "Admin")]
         [HttpPut("UpdateProduct/{id}")]
         public IActionResult UpdateProduct(int id, Product product)
         {
@@ -112,7 +116,7 @@ namespace ECommerce.API.Controllers
             // Return the updated product
             return Ok(updatedProduct);
         }
-
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("DeleteProduct/{id}")]
         public IActionResult DeleteProduct(int id)
         {
@@ -129,6 +133,7 @@ namespace ECommerce.API.Controllers
             // Return a success response
             return Ok();
         }
+        //[Authorize(Roles = "Admin")]
         [HttpGet("GetAllUsersCartItems")]
         public IActionResult GetAllUsersCartItems()
         {
@@ -171,6 +176,7 @@ namespace ECommerce.API.Controllers
             var result = dataAccess.GetProductReviews(productId);
             return Ok(result);
         }
+        //[Authorize]
 
         [HttpPost("InsertCartItem/{userid}/{productid}/{Duration}")]
         public IActionResult InsertCartItem(int userid, int productid, int Duration)
@@ -178,7 +184,7 @@ namespace ECommerce.API.Controllers
             var result = dataAccess.InsertCartItem(userid, productid, Duration);
             return Ok(result ? "inserted" : "not inserted");
         }
-
+        //[Authorize]
 
         [HttpPut("UpdateActiveCartOfUser/{id}")]
         public IActionResult UpdateActiveCartOfUser(int id, [FromBody] List<CartItem> updatedCartItems)
@@ -194,7 +200,7 @@ namespace ECommerce.API.Controllers
             }
         }
 
-
+        //[Authorize]
         [HttpGet("GetActiveCartOfUser/{id}")]
         public IActionResult GetActiveCartOfUser(int id)
         {
@@ -213,13 +219,14 @@ namespace ECommerce.API.Controllers
         {
             return Ok();
         }
+        //[Authorize]
         [HttpGet("GetPaymentMethods")]
         public IActionResult GetPaymentMethods()
         {
             var result = dataAccess.GetPaymentMethods();
             return Ok(result);
         }
-
+        //[Authorize]
         [HttpPost("InsertPayment")]
         public IActionResult InsertPayment(Payment payment)
         {
