@@ -127,13 +127,16 @@ export class CartComponent implements OnInit {
   }
   updateActiveCartOfUser(userId: number, updatedCartItems: any[]) {
     const url = `https://localhost:7255/api/Shopping/UpdateActiveCartOfUser/${userId}`;
+    let authToken = sessionStorage.getItem('user');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Accept: '*/*',
+      accept: '*/*',
+      Authorization: `Bearer ${authToken}`,
     });
+
     const options = { headers: headers };
 
-    return this.http.put(url, updatedCartItems, options);
+    return this.http.put(url, updatedCartItems, { headers: headers });
   }
   returnProduct(cartItemId: any, cartId: any) {
     let tmp = {

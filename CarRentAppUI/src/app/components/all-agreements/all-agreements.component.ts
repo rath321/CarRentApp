@@ -121,7 +121,7 @@ export class AllAgreementsComponent implements OnInit {
 
     const options = { headers: headers };
 
-    return this.http.put(url, updatedCartItems, options);
+    return this.http.put(url, updatedCartItems, { headers: headers });
   }
   refreshPage() {
     // Get the current URL
