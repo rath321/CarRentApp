@@ -178,82 +178,115 @@ namespace ECommerce.API.DataAccess
 
         public void AddCartItems(int cartId, List<CartItem> cartItems, SqlConnection connection, SqlTransaction transaction)
         {
-            string query = "INSERT INTO CartItems (CartId, ProductId, Duration) VALUES (@CartId, @ProductId, @Duration);";
-            SqlCommand command = new SqlCommand(query, connection, transaction);
-
-            foreach (CartItem cartItem in cartItems)
+            try
             {
-                command.Parameters.Clear();
-                command.Parameters.AddWithValue("@CartId", cartId);
-                command.Parameters.AddWithValue("@ProductId", cartItem.Product.Id);
-                command.Parameters.AddWithValue("@Duration", cartItem.Duration);
-                command.ExecuteNonQuery();
+                string query = "INSERT INTO CartItems (CartId, ProductId, Duration) VALUES (@CartId, @ProductId, @Duration);";
+                SqlCommand command = new SqlCommand(query, connection, transaction);
+
+                foreach (CartItem cartItem in cartItems)
+                {
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@CartId", cartId);
+                    command.Parameters.AddWithValue("@ProductId", cartItem.Product.Id);
+                    command.Parameters.AddWithValue("@Duration", cartItem.Duration);
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception here, you can log it or take appropriate action.
+                Console.WriteLine("An error occurred: " + ex.Message);
+                // You can also throw the exception again if needed.
+                throw;
             }
         }
+
 
         public List<Cart> GetAllPreviousCartsOfUser(int userid)
         {
             var carts = new List<Cart>();
-            using (SqlConnection connection = new(dbconnection))
+            try
             {
-                SqlCommand command = new()
+                using (SqlConnection connection = new SqlConnection(dbconnection))
                 {
-                    Connection = connection
-                };
-                string query = "SELECT CartId FROM Carts WHERE UserId=" + userid + " AND Ordered='true';";
-                command.CommandText = query;
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    var cartid = (int)reader["CartId"];
-                    carts.Add(GetCart(cartid));
+                    SqlCommand command = new SqlCommand()
+                    {
+                        Connection = connection
+                    };
+                    string query = "SELECT CartId FROM Carts WHERE UserId=" + userid + " AND Ordered='true';";
+                    command.CommandText = query;
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var cartid = (int)reader["CartId"];
+                        carts.Add(GetCart(cartid));
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception here, you can log it or take appropriate action.
+                Console.WriteLine("An error occurred: " + ex.Message);
+                // You can also throw the exception again if needed.
+                throw;
             }
             return carts;
         }
 
+
         public Cart GetCart(int cartid)
         {
             var cart = new Cart();
-            using (SqlConnection connection = new(dbconnection))
+            try
             {
-                SqlCommand command = new()
+                using (SqlConnection connection = new SqlConnection(dbconnection))
                 {
-                    Connection = connection
-                };
-                connection.Open();
-
-                string query = "SELECT * FROM CartItems WHERE CartId=" + cartid + ";";
-                command.CommandText = query;
-
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    CartItem item = new()
+                    SqlCommand command = new SqlCommand()
                     {
-                        Id = (int)reader["CartItemId"],
-                        Product = GetProduct((int)reader["ProductId"]),
-                        Duration = (int)reader["Duration"]
+                        Connection = connection
                     };
-                    cart.CartItems.Add(item);
-                }
-                reader.Close();
+                    connection.Open();
 
-                query = "SELECT * FROM Carts WHERE CartId=" + cartid + ";";
-                command.CommandText = query;
-                reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    cart.Id = cartid;
-                    cart.User = GetUser((int)reader["UserId"]);
-                    cart.Ordered = bool.Parse((string)reader["Ordered"]);
-                    cart.OrderedOn = (string)reader["OrderedOn"];
+                    string query = "SELECT * FROM CartItems WHERE CartId=" + cartid + ";";
+                    command.CommandText = query;
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        CartItem item = new CartItem()
+                        {
+                            Id = (int)reader["CartItemId"],
+                            Product = GetProduct((int)reader["ProductId"]),
+                            Duration = (int)reader["Duration"]
+                        };
+                        cart.CartItems.Add(item);
+                    }
+                    reader.Close();
+
+                    query = "SELECT * FROM Carts WHERE CartId=" + cartid + ";";
+                    command.CommandText = query;
+                    reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        cart.Id = cartid;
+                        cart.User = GetUser((int)reader["UserId"]);
+                        cart.Ordered = bool.Parse((string)reader["Ordered"]);
+                        cart.OrderedOn = (string)reader["OrderedOn"];
+                    }
+                    reader.Close();
                 }
-                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception here, you can log it or take appropriate action.
+                Console.WriteLine("An error occurred: " + ex.Message);
+                // You can also throw the exception again if needed.
+                throw;
             }
             return cart;
         }
+
         public bool UpdateCartItemDuration(int userId, int cartId, int cartItemId, int updatedDuration)
         {
             using (SqlConnection connection = new SqlConnection(dbconnection))
@@ -410,6 +443,7 @@ namespace ECommerce.API.DataAccess
             }
             return productCategories;
         }
+       
         public Product CreateProduct(Product product)
         {
             using (SqlConnection connection = new SqlConnection(dbconnection))
@@ -563,43 +597,54 @@ namespace ECommerce.API.DataAccess
         public List<Product> GetProducts(string category, string subcategory, int count)
         {
             var products = new List<Product>();
-            using (SqlConnection connection = new(dbconnection))
+            try
             {
-                SqlCommand command = new()
+                using (SqlConnection connection = new SqlConnection(dbconnection))
                 {
-                    Connection = connection
-                };
-
-                string query = "SELECT TOP " + count + " * FROM Products WHERE CategoryId=(SELECT CategoryId FROM ProductCategories WHERE Category=@c AND SubCategory=@s) ORDER BY newid();";
-                command.CommandText = query;
-                command.Parameters.Add("@c", System.Data.SqlDbType.NVarChar).Value = category;
-                command.Parameters.Add("@s", System.Data.SqlDbType.NVarChar).Value = subcategory;
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    var product = new Product()
+                    SqlCommand command = new SqlCommand()
                     {
-                        Id = (int)reader["ProductId"],
-                        Title = (string)reader["Title"],
-                        Description = (string)reader["Description"],
-                        Price = (double)reader["Price"],
-                        Quantity = (int)reader["Quantity"],
-                        ImageName = (string)reader["ImageName"]
+                        Connection = connection
                     };
 
-                    var categoryid = (int)reader["CategoryId"];
-                    product.ProductCategory = GetProductCategory(categoryid);
+                    string query = "SELECT TOP " + count + " * FROM Products WHERE CategoryId=(SELECT CategoryId FROM ProductCategories WHERE Category=@c AND SubCategory=@s) ORDER BY newid();";
+                    command.CommandText = query;
+                    command.Parameters.Add("@c", System.Data.SqlDbType.NVarChar).Value = category;
+                    command.Parameters.Add("@s", System.Data.SqlDbType.NVarChar).Value = subcategory;
 
-                    var offerid = (int)reader["OfferId"];
-                    product.Offer = GetOffer(offerid);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var product = new Product()
+                        {
+                            Id = (int)reader["ProductId"],
+                            Title = (string)reader["Title"],
+                            Description = (string)reader["Description"],
+                            Price = (double)reader["Price"],
+                            Quantity = (int)reader["Quantity"],
+                            ImageName = (string)reader["ImageName"]
+                        };
 
-                    products.Add(product);
+                        var categoryid = (int)reader["CategoryId"];
+                        product.ProductCategory = GetProductCategory(categoryid);
+
+                        var offerid = (int)reader["OfferId"];
+                        product.Offer = GetOffer(offerid);
+
+                        products.Add(product);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception here, you can log it or take appropriate action.
+                Console.WriteLine("An error occurred: " + ex.Message);
+                // You can also throw the exception again if needed.
+                throw;
             }
             return products;
         }
+
 
         public void InsertToBeDeletedItem(int cartId, int cartItemId)
         {
@@ -707,45 +752,46 @@ namespace ECommerce.API.DataAccess
         public List<Product> GetProductsAll()
         {
             var products = new List<Product>();
-            using (SqlConnection connection = new SqlConnection(dbconnection))
+            try
             {
-                SqlCommand command = new SqlCommand()
+                using (SqlConnection connection = new SqlConnection(dbconnection))
                 {
-                    Connection = connection
-                };
-
-                string query = "SELECT";
-                //if (count.HasValue)
-                //{
-                //    query += " TOP (@count)";
-                //    command.Parameters.Add("@count", System.Data.SqlDbType.Int).Value = count.Value;
-                //}
-                query += " * FROM Products";
-
-              
-
-                query += " ORDER BY newid();";
-                command.CommandText = query;
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    var product = new Product()
+                    SqlCommand command = new SqlCommand()
                     {
-                        Id = (int)reader["ProductId"],
-                        Title = (string)reader["Title"],
-                        Description = (string)reader["Description"],
-                        Price = (double)reader["Price"],
-                        Quantity = (int)reader["Quantity"],
-                        ImageName = (string)reader["ImageName"]
+                        Connection = connection
                     };
 
-                    products.Add(product);
+                    string query = "SELECT * FROM Products ORDER BY newid();";
+                    command.CommandText = query;
+
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var product = new Product()
+                        {
+                            Id = (int)reader["ProductId"],
+                            Title = (string)reader["Title"],
+                            Description = (string)reader["Description"],
+                            Price = (double)reader["Price"],
+                            Quantity = (int)reader["Quantity"],
+                            ImageName = (string)reader["ImageName"]
+                        };
+
+                        products.Add(product);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception here, you can log it or take appropriate action.
+                Console.WriteLine("An error occurred: " + ex.Message);
+                // You can also throw the exception again if needed.
+                throw;
             }
             return products;
         }
+
         public List<User> GetAllUsers()
         {
             List<User> users = new List<User>();
@@ -814,50 +860,61 @@ namespace ECommerce.API.DataAccess
 
         public bool InsertCartItem(int userId, int productId, int duration)
         {
-            using (SqlConnection connection = new SqlConnection(dbconnection))
+            try
             {
-                connection.Open();
-
-                using (SqlCommand command = connection.CreateCommand())
+                using (SqlConnection connection = new SqlConnection(dbconnection))
                 {
-                    // Check if there is an active cart for the user
-                    string cartCheckQuery = "SELECT COUNT(*) FROM Carts WHERE UserId = @UserId AND Ordered = 'false';";
+                    connection.Open();
 
-                    command.CommandText = cartCheckQuery;
-                    command.Parameters.AddWithValue("@UserId", userId);
-
-                    int cartCount = (int)command.ExecuteScalar();
-
-                    if (cartCount == 0)
+                    using (SqlCommand command = connection.CreateCommand())
                     {
-                        // If no active cart exists, create one
-                        string createCartQuery = "INSERT INTO Carts (UserId, Ordered, OrderedOn) VALUES (@UserId, 'false', '');";
+                        // Check if there is an active cart for the user
+                        string cartCheckQuery = "SELECT COUNT(*) FROM Carts WHERE UserId = @UserId AND Ordered = 'false';";
 
-                        command.CommandText = createCartQuery;
+                        command.CommandText = cartCheckQuery;
+                        command.Parameters.AddWithValue("@UserId", userId);
+
+                        int cartCount = (int)command.ExecuteScalar();
+
+                        if (cartCount == 0)
+                        {
+                            // If no active cart exists, create one
+                            string createCartQuery = "INSERT INTO Carts (UserId, Ordered, OrderedOn) VALUES (@UserId, 'false', '');";
+
+                            command.CommandText = createCartQuery;
+                            command.ExecuteNonQuery();
+                        }
+
+                        // Get the CartId of the active cart
+                        string getCartIdQuery = "SELECT CartId FROM Carts WHERE UserId = @UserId AND Ordered = 'false';";
+
+                        command.CommandText = getCartIdQuery;
+
+                        int cartId = (int)command.ExecuteScalar();
+
+                        // Insert the new cart item
+                        string insertCartItemQuery = "INSERT INTO CartItems (CartId, ProductId, Duration) VALUES (@CartId, @ProductId, @Duration);";
+
+                        command.CommandText = insertCartItemQuery;
+                        command.Parameters.AddWithValue("@CartId", cartId);
+                        command.Parameters.AddWithValue("@ProductId", productId);
+                        command.Parameters.AddWithValue("@Duration", duration);
+
                         command.ExecuteNonQuery();
                     }
-
-                    // Get the CartId of the active cart
-                    string getCartIdQuery = "SELECT CartId FROM Carts WHERE UserId = @UserId AND Ordered = 'false';";
-
-                    command.CommandText = getCartIdQuery;
-
-                    int cartId = (int)command.ExecuteScalar();
-
-                    // Insert the new cart item
-                    string insertCartItemQuery = "INSERT INTO CartItems (CartId, ProductId, Duration) VALUES (@CartId, @ProductId, @Duration);";
-
-                    command.CommandText = insertCartItemQuery;
-                    command.Parameters.AddWithValue("@CartId", cartId);
-                    command.Parameters.AddWithValue("@ProductId", productId);
-                    command.Parameters.AddWithValue("@Duration", duration);
-
-                    command.ExecuteNonQuery();
                 }
-            }
 
-            return true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception here, you can log it or take appropriate action.
+                Console.WriteLine("An error occurred: " + ex.Message);
+                // You can also throw the exception again if needed.
+                throw;
+            }
         }
+
 
         public bool DeleteCartItem(int cartId, int cartItemId)
         {

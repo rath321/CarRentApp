@@ -51,9 +51,11 @@ export class ProductDetailsComponent implements OnInit {
 
   updateProduct(id: number) {
     const url = `https://localhost:7255/api/Shopping/UpdateProduct/${id}`;
+    let authToken = sessionStorage.getItem('user');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       accept: '*/*',
+      Authorization: `Bearer ${authToken}`,
     });
 
     const requestBody = {

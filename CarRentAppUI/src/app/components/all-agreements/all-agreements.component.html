@@ -21,6 +21,7 @@
                 class="col-4 overflow-hidden d-flex justify-content-center align-items-center"
               >
                 <img
+                  *ngIf="cartItem?.product?.imageName"
                   src="{{ cartItem?.product?.imageName }}"
                   style="width: 60px; height: 60px"
                   class="img-fluid rounded-start"

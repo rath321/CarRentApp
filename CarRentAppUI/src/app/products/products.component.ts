@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Category, NavigationItem, Product } from '../models/models';
 import { NavigationService } from '../services/navigation.service';
 import { UtilityService } from '../services/utility.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-products',
@@ -118,8 +118,14 @@ export class ProductsComponent implements OnInit {
   }
   deleteProduct(id: number) {
     const url = `https://localhost:7255/api/Shopping/DeleteProduct/${id}`;
+    let authToken = sessionStorage.getItem('user');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${authToken}`,
+    });
 
-    this.http.delete(url).subscribe(
+    this.http.delete(url, { headers: headers }).subscribe(
       () => {
         // Delete request successful
         console.log('Product deleted successfully.');

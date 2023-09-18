@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "SgiTFdNstnDYVXg6vHy9eihsozr6nzLwfESlDVz3KSj2Yb/rAzp0xJ+rKmy3buyT0RQgM0vL+rn3r6mPm/4Blg==",
+  "dgSpecHash": "2gOArvSeh7DxcKycJAYPuDc7Ejr86Pvy7R0Oz0Jjd9cRo33oBNoPks6m2cJRnhlHAHbVS4IfgjRwvw0BtcQFMA==",
   "success": true,
   "projectFilePath": "C:\\Users\\nikhilrathore\\Downloads\\GroceryApp\\Car_Rent.Api\\WebApplication-13\\WebApplication-13\\WebApplication-13.csproj",
   "expectedPackageFiles": [
@@ -76,10 +76,10 @@
     "C:\\Users\\nikhilrathore\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512",
     "C:\\Users\\nikhilrathore\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\nikhilrathore\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512",
-    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.21\\microsoft.windowsdesktop.app.ref.6.0.21.nupkg.sha512",
-    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.21\\microsoft.netcore.app.ref.6.0.21.nupkg.sha512",
-    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.21\\microsoft.aspnetcore.app.ref.6.0.21.nupkg.sha512",
-    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.21\\microsoft.netcore.app.host.win-x64.6.0.21.nupkg.sha512"
+    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.22\\microsoft.windowsdesktop.app.ref.6.0.22.nupkg.sha512",
+    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.22\\microsoft.netcore.app.ref.6.0.22.nupkg.sha512",
+    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.22\\microsoft.aspnetcore.app.ref.6.0.22.nupkg.sha512",
+    "C:\\Users\\nikhilrathore\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.22\\microsoft.netcore.app.host.win-x64.6.0.22.nupkg.sha512"
   ],
   "logs": []
 }

@@ -45,7 +45,7 @@ namespace WebApplication_13.Business
             var result = dataAccess.GetProduct(id);
             return Ok(result);
         }
-        //[Authorize(Roles="Admin")]
+        [Authorize(Roles="Admin")]
         [HttpPost("CreateProduct")]
         public IActionResult CreateProduct(Product product)
         {
@@ -64,7 +64,7 @@ namespace WebApplication_13.Business
             // Return the created product
             return Ok();
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("ToBeDeleted")]
         public IActionResult ToBeDeletedGet(int cartItemId, int cartId)
         {
@@ -72,7 +72,7 @@ namespace WebApplication_13.Business
 
             return Ok(tmp);
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteToBeDeleted/{cartItemId}/{cartId}")]
         public IActionResult DeleteToBeDeleted(int cartItemId, int cartId)
         {
@@ -83,7 +83,7 @@ namespace WebApplication_13.Business
          
             return Ok();
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllUsers")]
         public IActionResult GetAllUsers()
         {
@@ -92,7 +92,6 @@ namespace WebApplication_13.Business
 
             return Ok(tmp);
         }
-        //[Authorize(Roles = "Admin")]
         [HttpPut("UpdateProduct/{id}")]
         public IActionResult UpdateProduct(int id, Product product)
         {
@@ -100,7 +99,7 @@ namespace WebApplication_13.Business
 
             return Ok(updatedProduct);
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteProduct/{id}")]
         public IActionResult DeleteProduct(int id)
         {
@@ -108,6 +107,7 @@ namespace WebApplication_13.Business
 
             return Ok();
         }
+        [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteCartItem/{cartItemId}/{cartId}/")]
         public IActionResult DeleteCartItem(int cartItemId, int cartId)
         {
@@ -115,7 +115,7 @@ namespace WebApplication_13.Business
 
             return Ok();
         }
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllUsersCartItems")]
         public IActionResult GetAllUsersCartItems()
         {
@@ -158,7 +158,7 @@ namespace WebApplication_13.Business
             var result = dataAccess.GetProductReviews(productId);
             return Ok(result);
         }
-        //[Authorize]
+        [Authorize]
 
         [HttpPost("InsertCartItem/{userid}/{productid}/{Duration}")]
         public IActionResult InsertCartItem(int userid, int productid, int Duration)
@@ -166,7 +166,7 @@ namespace WebApplication_13.Business
             var result = dataAccess.InsertCartItem(userid, productid, Duration);
             return Ok(result ? "inserted" : "not inserted");
         }
-        //[Authorize]
+        [Authorize]
 
         [HttpPut("UpdateActiveCartOfUser/{id}")]
         public IActionResult UpdateActiveCartOfUser(int id, [FromBody] List<CartItem> updatedCartItems)
@@ -182,7 +182,7 @@ namespace WebApplication_13.Business
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetActiveCartOfUser/{id}")]
         public IActionResult GetActiveCartOfUser(int id)
         {
@@ -201,14 +201,14 @@ namespace WebApplication_13.Business
         {
             return Ok();
         }
-        //[Authorize]
+        [Authorize]
         [HttpGet("GetPaymentMethods")]
         public IActionResult GetPaymentMethods()
         {
             var result = dataAccess.GetPaymentMethods();
             return Ok(result);
         }
-        //[Authorize]
+        [Authorize]
         [HttpPost("InsertPayment")]
         public IActionResult InsertPayment(Payment payment)
         {

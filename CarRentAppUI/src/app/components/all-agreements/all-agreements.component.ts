@@ -18,11 +18,19 @@ export class AllAgreementsComponent implements OnInit {
     private http: HttpClient,
     private router: Router
   ) {}
-  data: any = [];
+  data: any[] = [];
   updateItems: any;
   activeCartArray: any[] = [];
+
   ngOnInit(): void {
-    this.http.get(this.url).subscribe((res: any) => {
+    let authToken = sessionStorage.getItem('user');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${authToken}`,
+    });
+
+    this.http.get(this.url, { headers: headers }).subscribe((res: any) => {
       for (let i = 0; i < res.length; i++) {
         // Your code here
         let tmp = [];
@@ -48,6 +56,7 @@ export class AllAgreementsComponent implements OnInit {
         this.activeCartArray.push(activeArrayTmp);
         this.data.push(tmp);
       }
+      console.log(this.data);
     });
   }
   deleteProduct(cartItemId: any, cartId: any, id: any) {
@@ -75,10 +84,13 @@ export class AllAgreementsComponent implements OnInit {
   }
   updateProduct(id: number, product: Product) {
     const url = `https://localhost:7255/api/Shopping/UpdateProduct/${id}`;
+    let authToken = sessionStorage.getItem('user');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       accept: '*/*',
+      Authorization: `Bearer ${authToken}`,
     });
+
     return this.http.put(url, product, { headers });
   }
   onPlus(idx: any, idy: any) {
@@ -100,10 +112,13 @@ export class AllAgreementsComponent implements OnInit {
   }
   updateActiveCartOfUser(userId: number, updatedCartItems: any[]) {
     const url = `https://localhost:7255/api/Shopping/UpdateActiveCartOfUser/${userId}`;
+    let authToken = sessionStorage.getItem('user');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Accept: '*/*',
+      accept: '*/*',
+      Authorization: `Bearer ${authToken}`,
     });
+
     const options = { headers: headers };
 
     return this.http.put(url, updatedCartItems, options);
