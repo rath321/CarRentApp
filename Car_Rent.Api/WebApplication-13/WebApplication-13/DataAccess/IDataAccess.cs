@@ -12,6 +12,7 @@ namespace ECommerce.API.DataAccess
         public List<Product> GetProductsAll();
         List<Product> GetProducts(string category, string subcategory, int count);
         Product GetProduct(int id);
+        public List<toBeDeleted> GetToBeDeletedItemsByUserId(int userId);
         public void UpdateActiveCartOfUser(int userId, List<CartItem> updatedCartItems);
         public bool UpdateCartItemDuration(int userId, int cartId, int cartItemId, int updatedDuration);
         //public int GetActiveCartIdForUser(int userId, SqlConnection connection, SqlTransaction transaction);
@@ -32,11 +33,12 @@ namespace ECommerce.API.DataAccess
         bool InsertCartItem(int userId, int productId, int Duration);
         Cart GetActiveCartOfUser(int userid);
         public List<User> GetAllUsers();
-        public void InsertToBeDeletedItem(int cartId, int cartItemId);
+        public void InsertToBeDeletedItem(int cartId, int cartItemId, int UserId);
         Cart GetCart(int cartid);
         List<Cart> GetAllPreviousCartsOfUser(int userid);
         List<PaymentMethod> GetPaymentMethods();
         int InsertPayment(Payment payment);
         int InsertOrder(Order order);
+        public void UpdateToBeDeletedItem(int cartId, int cartItemId, int userId);
     }
 }

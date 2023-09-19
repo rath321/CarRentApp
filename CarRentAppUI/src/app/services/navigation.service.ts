@@ -8,6 +8,7 @@ import {
   PaymentMethod,
   User,
 } from '../models/models';
+import { UtilityService } from './utility.service';
 
 @Injectable({
   providedIn: 'root',
@@ -178,7 +179,7 @@ export class NavigationService {
       productid +
       '/' +
       duration;
-    return this.http.post(url, null);
+    return this.http.post(url, null, { headers: headers });
   }
 
   getActiveCartOfUser(userid: number) {
@@ -210,8 +211,36 @@ export class NavigationService {
       'ToBeDeleted/' +
       itemKeys.cartItemId +
       '/' +
-      itemKeys.cartId;
-    return this.http.post(url, null);
+      itemKeys.cartId +
+      '/' +
+      itemKeys.UserId;
+    return this.http.post(url, null, { headers: headers });
+  }
+  returnToBeDeletedProductUser(userId: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
+    let url = this.baseurl + 'GetToBeDeletedItemsByUserId/' + userId;
+    return this.http.get(url, { headers: headers });
+  }
+  updateToBeDeletedProduct(cartId: any, cartItemId: any, userId: any) {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${this.authToken}`,
+    });
+
+    let url =
+      this.baseurl +
+      'UpdateToBeDeleted/' +
+      cartItemId +
+      '/' +
+      cartId +
+      '/' +
+      userId;
+    return this.http.put(url, {}, { headers: headers });
   }
   returnToBeDeletedProduct() {
     const headers = new HttpHeaders({

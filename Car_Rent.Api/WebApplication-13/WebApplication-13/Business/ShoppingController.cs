@@ -55,14 +55,35 @@ namespace WebApplication_13.Business
             // Return the created product
             return Ok(createdProduct);
         }
-        [HttpPost("ToBeDeleted/{cartItemId}/{cartId}")]
-        public IActionResult ToBeDeleted(int cartItemId, int cartId)
+        [Authorize]
+        [HttpPost("ToBeDeleted/{cartItemId}/{cartId}/{UserId}")]
+        public IActionResult ToBeDeleted(int cartItemId, int cartId, int UserId)
         {
 
-            dataAccess.InsertToBeDeletedItem(cartId, cartItemId);
+            dataAccess.InsertToBeDeletedItem(cartId, cartItemId, UserId);
 
             // Return the created product
             return Ok();
+        }
+        [Authorize]
+        [HttpPut("UpdateToBeDeleted/{cartItemId}/{cartId}/{UserId}")]
+        public IActionResult UpdateToBeDeletedItem(int cartItemId, int cartId, int UserId)
+        {
+
+            dataAccess.UpdateToBeDeletedItem(cartId, cartItemId, UserId);
+
+            // Return the created product
+            return Ok();
+        }
+        [Authorize]
+        [HttpGet("GetToBeDeletedItemsByUserId/{UserId}")]
+        public IActionResult GetToBeDeletedItemsByUserId( int UserId)
+        {
+
+            List<toBeDeleted> tmp= dataAccess.GetToBeDeletedItemsByUserId(UserId);
+
+            // Return the created product
+            return Ok(tmp);
         }
         [Authorize(Roles = "Admin")]
         [HttpGet("ToBeDeleted")]

@@ -138,10 +138,11 @@ export class CartComponent implements OnInit {
 
     return this.http.put(url, updatedCartItems, { headers: headers });
   }
-  returnProduct(cartItemId: any, cartId: any) {
+  returnProduct(cartItemId: any, cartId: any, UserId: any) {
     let tmp = {
       cartId,
       cartItemId,
+      UserId,
     };
     this.navigationService.returnProductAddition(tmp).subscribe((res) => {
       console.log(res);

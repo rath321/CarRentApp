@@ -21,7 +21,8 @@ export class AllAgreementsComponent implements OnInit {
   data: any[] = [];
   updateItems: any;
   activeCartArray: any[] = [];
-
+  isActive: boolean = true;
+  isLoading: boolean = false;
   ngOnInit(): void {
     let authToken = sessionStorage.getItem('user');
     const headers = new HttpHeaders({
@@ -30,13 +31,56 @@ export class AllAgreementsComponent implements OnInit {
       Authorization: `Bearer ${authToken}`,
     });
 
+    this.data = [];
+    this.activeCartArray = [];
+    if (this.isActive) {
+      this.http.get(this.url, { headers: headers }).subscribe((res: any) => {
+        for (let i = 0; i < res.length; i++) {
+          // Your code here
+          let tmp: Object[] = [];
+          let activeArrayTmp: any[] = [];
+          tmp.push(res[i].id);
+          tmp.push(res[i].firstName);
+
+          this.navigationService
+            .getActiveCartOfUser(res[i].id)
+            .subscribe((data: any) => {
+              tmp.push(data.cartItems);
+              for (var j = 0; j < data?.cartItems?.length; j++) {
+                activeArrayTmp.push({
+                  quantity: data.cartItems[j].duration,
+                  id: data.cartItems[j].product.id,
+                });
+              }
+            });
+
+          this.activeCartArray.push(activeArrayTmp);
+
+          this.data.push(tmp);
+        }
+      });
+    }
+  }
+  buttonClass1: string = 'btn btn-primary';
+  buttonClass2: string = 'btn btn-secondary';
+  fn2() {
+    let authToken = sessionStorage.getItem('user');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${authToken}`,
+    });
+
+    this.data = [];
+    this.activeCartArray = [];
     this.http.get(this.url, { headers: headers }).subscribe((res: any) => {
       for (let i = 0; i < res.length; i++) {
         // Your code here
-        let tmp = [];
+        let tmp: Object[] = [];
         let activeArrayTmp: any[] = [];
         tmp.push(res[i].id);
         tmp.push(res[i].firstName);
+
         this.navigationService
           .getActiveCartOfUser(res[i].id)
           .subscribe((data: any) => {
@@ -48,16 +92,59 @@ export class AllAgreementsComponent implements OnInit {
               });
             }
           });
+
+        this.activeCartArray.push(activeArrayTmp);
+
+        this.data.push(tmp);
+      }
+    });
+  }
+  fn1() {
+    this.data = [];
+    let authToken = sessionStorage.getItem('user');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      Authorization: `Bearer ${authToken}`,
+    });
+    this.http.get(this.url, { headers: headers }).subscribe((res: any) => {
+      for (let i = 0; i < res.length; i++) {
+        // Your code here
+        let tmp: Object[] = [];
+        let activeArrayTmp: any[] = [];
+        tmp.push(res[i].id);
+        tmp.push(res[i].firstName);
+
         this.navigationService
           .getAllPreviousCarts(res[i].id)
           .subscribe((data) => {
             tmp.push(data);
           });
-        this.activeCartArray.push(activeArrayTmp);
+
         this.data.push(tmp);
       }
-      console.log(this.data);
     });
+  }
+  negate(e: any) {
+    this.isActive = !this.isActive;
+    if (this.isActive == false) {
+      this.fn1();
+    } else {
+      this.fn2();
+    }
+    // console.log(this.buttonClass1, this.isActive);
+    // console.log(this.buttonClass2, this.isActive);
+    this.buttonClass1 = !this.isActive
+      ? 'btn btn-secondary'
+      : 'btn btn-primary';
+    this.buttonClass2 = this.isActive ? 'btn btn-secondary' : 'btn btn-primary';
+
+    // this.buttonClass1 = this.isActive
+    //   ? 'btn btn-secondary'
+    //   : 'btn btn-primary';
+    // this.buttonClass2 = !this.isActive
+    //   ? 'btn btn-secondary'
+    //   : 'btn btn-primary';
   }
   deleteProduct(cartItemId: any, cartId: any, id: any) {
     let tmp: Product;
@@ -66,17 +153,13 @@ export class AllAgreementsComponent implements OnInit {
       .subscribe((res) => {
         this.navigationService.getProduct(id).subscribe((res: any) => {
           tmp = res;
-          // console.log(res);
-          // console.log(res.quantity);
           tmp.quantity += 1;
-          // console.log(tmp.quantity);
           this.updateProduct(id, tmp).subscribe((res) => {
-            // console.log(res);
-            this.navigationService
-              .deleteReturnToBeDeletedProduct(cartItemId, cartId)
-              .subscribe((res) => {
-                console.log(res);
-              });
+            // this.navigationService
+            //   .deleteReturnToBeDeletedProduct(cartItemId, cartId)
+            //   .subscribe((res) => {
+            //     console.log(res);
+            //   });
             this.refreshPage();
           });
         });

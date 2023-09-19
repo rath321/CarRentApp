@@ -4,5 +4,7 @@
     {
         public int cartId { get; set; }
         public int cartItemId { get; set; }
+        public int UserId { get; set; }
+        public int Deleted { get; set; }
     }
 }

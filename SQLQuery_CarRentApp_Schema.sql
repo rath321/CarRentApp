@@ -76,7 +76,9 @@ GO
 CREATE TABLE toBeDeletedItems (
     cartId INT NOT NULL,
     cartItemId INT NOT NULL,
-    PRIMARY KEY (cartId, cartItemId)
+	UserId INT NOT NULL,
+	Deleted INT NOT NULL
+    PRIMARY KEY (cartId, cartItemId, UserId)
 );
 /****** Object:  Table [dbo].[PaymentMethods]    Script Date: 25-09-2022 17:30:58 ******/
 SET ANSI_NULLS ON

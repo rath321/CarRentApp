@@ -3,14 +3,16 @@
   🔴 This is an Admin Account
 </h4>
 <div *ngIf="utilityService.isAdmin()">
-  <h4 style="color: red">Notifications</h4>
-  <span>To Be Returned</span>
+  <h4 style="color: rgb(47, 0, 113)">Notifications</h4>
+  <h5>Return Requests</h5>
   <table class="table">
     <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col">Cart ID</th>
         <th scope="col">Cart Item ID</th>
+        <th scope="col">User ID</th>
+        <th scope="col">Response</th>
       </tr>
     </thead>
     <tbody>
@@ -18,6 +20,42 @@
         <th scope="row">{{ i }}</th>
         <td>{{ val.cartId }}</td>
         <td>{{ val.cartItemId }}</td>
+        <td>{{ val.userId }}</td>
+        <td
+          style="cursor: pointer"
+          (click)="accept(val.cartId, val.cartItemId, val.userId, val.deleted)"
+        >
+          <b [style.color]="val.deleted === 0 ? 'red' : 'green'">{{
+            getText(val.deleted)
+          }}</b>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div *ngIf="!utilityService.isAdmin()">
+  <h5>Return Requests</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Cart ID</th>
+        <th scope="col">Cart Item ID</th>
+        <th scope="col">User ID</th>
+        <th scope="col">Return</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let val of toBeDeleted; index as i">
+        <th scope="row">{{ i }}</th>
+        <td>{{ val.cartId }}</td>
+        <td>{{ val.cartItemId }}</td>
+        <td>{{ val.userId }}</td>
+        <td>
+          <b [style.color]="val.deleted === 0 ? 'red' : 'green'">{{
+            getText(val.deleted)
+          }}</b>
+        </td>
       </tr>
     </tbody>
   </table>

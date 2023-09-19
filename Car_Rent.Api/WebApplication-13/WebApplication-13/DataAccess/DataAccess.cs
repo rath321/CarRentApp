@@ -646,21 +646,71 @@ namespace ECommerce.API.DataAccess
         }
 
 
-        public void InsertToBeDeletedItem(int cartId, int cartItemId)
+        public void InsertToBeDeletedItem(int cartId, int cartItemId, int UserId)
         {
             using (SqlConnection connection = new SqlConnection(dbconnection))
             {
                 connection.Open();
-                string insertQuery = "INSERT INTO toBeDeletedItems (cartId, cartItemId) VALUES (@CartId, @CartItemId)";
+                string insertQuery = "INSERT INTO toBeDeletedItems (cartId, cartItemId, UserId, Deleted) VALUES (@CartId, @CartItemId, @UserId, @Deleted)";
                 using (SqlCommand command = new SqlCommand(insertQuery, connection))
                 {
                     command.Parameters.AddWithValue("@CartId", cartId);
                     command.Parameters.AddWithValue("@CartItemId", cartItemId);
+                    command.Parameters.AddWithValue("@UserId", UserId);
+                    command.Parameters.AddWithValue("@Deleted", 0);
                     command.ExecuteNonQuery();
                 }
             }
 
         }
+        public void UpdateToBeDeletedItem(int cartId, int cartItemId, int userId)
+        {
+            using (SqlConnection connection = new SqlConnection(dbconnection))
+            {
+                connection.Open();
+                string updateQuery = "UPDATE toBeDeletedItems SET Deleted = 1 WHERE cartId = @CartId AND cartItemId = @CartItemId AND UserId = @UserId";
+                using (SqlCommand command = new SqlCommand(updateQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@CartId", cartId);
+                    command.Parameters.AddWithValue("@CartItemId", cartItemId);
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+        public List<toBeDeleted> GetToBeDeletedItemsByUserId(int userId)
+        {
+            List<toBeDeleted> toBeDeletedItems = new List<toBeDeleted>();
+
+            using (SqlConnection connection = new SqlConnection(dbconnection))
+            {
+                connection.Open();
+                string selectQuery = "SELECT * FROM toBeDeletedItems WHERE UserId = @UserId";
+
+                using (SqlCommand command = new SqlCommand(selectQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            toBeDeleted item = new toBeDeleted
+                            {
+                                cartId = (int)reader["cartId"],
+                                cartItemId = (int)reader["cartItemId"],
+                                UserId = (int)reader["UserId"],
+                                Deleted = (int)reader["Deleted"]
+                            };
+                            toBeDeletedItems.Add(item);
+                        }
+                    }
+                }
+            }
+
+            return toBeDeletedItems;
+        }
+
         public bool DeleteToBeDeletedItem(int cartId, int cartItemId)
         {
             using (SqlConnection connection = new SqlConnection(dbconnection))
@@ -697,7 +747,9 @@ namespace ECommerce.API.DataAccess
                             toBeDeleted item = new toBeDeleted
                             {
                                 cartId = (int)reader["cartId"],
-                                cartItemId = (int)reader["cartItemId"]
+                                cartItemId = (int)reader["cartItemId"],
+                                 UserId = (int)reader["UserId"],
+                                Deleted = (int)reader["Deleted"]
                             };
                             toBeDeletedItems.Add(item);
                         }
